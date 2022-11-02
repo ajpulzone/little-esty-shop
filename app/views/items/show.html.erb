@@ -21,7 +21,7 @@
 </div>
 <div class="row mt-5">
   <div class="col">
-    <p><%= button_to 'Update Item', merchants_path, method: :get %></p>
+    <p><%= link_to 'Update Item', edit_merchant_item_path(merchant_id: @item.merchant_id, id: @item.id) %></p>
   </div>
   <div class="col">
     <p></p>
