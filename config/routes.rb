@@ -5,10 +5,10 @@ Rails.application.routes.draw do
   resources :merchants, only: [:index]
   
   get 'merchants/:id/dashboard', to: 'merchants#show'
+  get 'merchants/:id/invoices', to: 'invoices#index'
 
   resources :merchants do
     resources :items, only: [:index, :show]
-    resources :merchants, only: [:show]
   end
 
 end
