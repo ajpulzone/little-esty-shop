@@ -1,17 +1,7 @@
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe Customer, type: :model do
-
-  describe 'relationships' do
-    it { should have_many :invoices }
-    # it { should have_many :transactions, through: :invoices}
-  end
-
-  describe 'validations' do
-    it {should validate_presence_of :first_name}
-    it {should validate_presence_of :last_name}
-  end
-
+RSpec.describe "Admin Dashboard (Index", type: :feature do
+  
   before(:each) do
     @customer_1 = Customer.create!(first_name: "Luke", last_name: "Harison")
     @customer_2 = Customer.create!(first_name: "Angela", last_name: "Leizer")
@@ -64,22 +54,53 @@ RSpec.describe Customer, type: :model do
     @transaction_20 = @invoice_20.transactions.create!(credit_card_number: 4886443388914010, result: "success")
   end
 
-  describe "#top_five_customers" do
-    it "should return a list of the top 5 customers who have had the most successful transactions" do
-      expect(Customer.top_five_customers).to eq([@customer_3, @customer_1, @customer_2, @customer_5, @customer_7])
-      expect(Customer.top_five_customers).to_not include(@customer_4)
-      expect(Customer.top_five_customers).to_not include(@customer_6)
-    end
+  it "has a header indicating that the user is on the admin dashboard" do
+    visit "/admin"
+    expect(page).to have_content("Admin Dashboard")
   end
 
-  describe "#transaction_ct" do
-    it "should give a total count of transactions with the specified result for a customer" do
-      expect(@customer_1.transaction_ct("success")).to eq(2)
-      expect(@customer_1.transaction_ct("failed")).to eq(3)
-      expect(@customer_3.transaction_ct("success")).to eq(3)
-      expect(@customer_3.transaction_ct("failed")).to eq(1)
-      expect(@customer_2.transaction_ct("success")).to_not eq(3)
-      expect(@customer_7.transaction_ct("success")).to_not eq(0)
-    end
+  it "has a link to the admin merchants index" do
+    visit "/admin"
+    expect(page).to have_link("Admin Merchants", href: "/admin/merchants")
+  end
+
+  it "has a link to the admin invoices index" do
+    visit "/admin"
+    expect(page).to have_link("Admin Invoices", href: "/admin/invoices")
+  end
+
+  it "has a list of the top 5 customers who have conducted the largest number of successful
+    transactions" do
+      visit "/admin"
+
+      within("#admin-dashboard") do
+        expect(page).to have_content("Name: #{@customer_1.first_name} #{@customer_1.last_name}")
+        expect(page).to have_content("Name: #{@customer_2.first_name} #{@customer_2.last_name}")
+        expect(page).to have_content("Name: #{@customer_3.first_name} #{@customer_3.last_name}")
+        expect(page).to have_content("Name: #{@customer_5.first_name} #{@customer_5.last_name}")
+        expect(page).to have_content("Name: #{@customer_7.first_name} #{@customer_7.last_name}")
+      end 
+
+      within("#admin-dashboard") do
+        expect("#{@customer_3.first_name} #{@customer_3.last_name}").to appear_before("#{@customer_1.first_name} #{@customer_1.last_name}")
+        expect("#{@customer_1.first_name} #{@customer_1.last_name}").to appear_before("#{@customer_2.first_name} #{@customer_2.last_name}")
+        expect("#{@customer_5.first_name} #{@customer_5.last_name}").to appear_before("#{@customer_7.first_name} #{@customer_7.last_name}")
+        expect("#{@customer_7.first_name} #{@customer_7.last_name}").to_not appear_before("#{@customer_5.first_name} #{@customer_5.last_name}")
+        expect("#{@customer_2.first_name} #{@customer_2.last_name}").to_not appear_before("#{@customer_1.first_name} #{@customer_1.last_name}")
+        expect("#{@customer_5.first_name} #{@customer_5.last_name}").to_not appear_before("#{@customer_2.first_name} #{@customer_2.last_name}")
+      end 
+  end
+
+  it "next to each of the top 5 customers it has the number of successful transactions they
+    have conducted" do
+      visit "/admin"
+
+       within("#admin-dashboard") do
+        expect(page).to have_content("Name: #{@customer_1.first_name} #{@customer_1.last_name} | Number of Successful Transactions: #{@customer_1.transaction_ct("success")}")
+        expect(page).to have_content("Name: #{@customer_2.first_name} #{@customer_2.last_name} | Number of Successful Transactions: #{@customer_2.transaction_ct("success")}")
+        expect(page).to have_content("Name: #{@customer_3.first_name} #{@customer_3.last_name} | Number of Successful Transactions: #{@customer_3.transaction_ct("success")}")
+        expect(page).to have_content("Name: #{@customer_5.first_name} #{@customer_5.last_name} | Number of Successful Transactions: #{@customer_5.transaction_ct("success")}")
+        expect(page).to have_content("Name: #{@customer_7.first_name} #{@customer_7.last_name} | Number of Successful Transactions: #{@customer_7.transaction_ct("success")}")
+      end 
   end
 end
