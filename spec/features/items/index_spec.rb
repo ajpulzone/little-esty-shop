@@ -20,6 +20,12 @@ RSpec.describe 'Merchants' do
         click_link(@item1.name)
         expect(current_path).to eq("/merchants/#{@merchant.id}/items/#{@item1.id}")
       end
+
+      it 'has some behaviour' do
+        visit "/merchants/#{@merchant.id}/items"
+        expect(page).to have_css('.form-check')
+      end
+
     end
   end
 end
