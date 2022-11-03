@@ -17,13 +17,13 @@ RSpec.describe 'Merchants' do
 
       it 'links to each individual item show page' do
         visit "/merchants/#{@merchant.id}/items"
-        click_link(@item1.name)
+        first(:link, @item1.name).click
         expect(current_path).to eq("/merchants/#{@merchant.id}/items/#{@item1.id}")
       end
 
-      it 'has some behaviour' do
+      it 'has at least one enable button' do
         visit "/merchants/#{@merchant.id}/items"
-        expect(page).to have_css('.form-check')
+        expect(page).to have_button('enable')
       end
 
     end
