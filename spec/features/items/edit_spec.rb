@@ -21,6 +21,7 @@ RSpec.describe 'Merchants' do
         fill_in "Name",	with: "Foo sometext"
         click_button("Update Item")
         expect(current_path).to eq("/merchants/#{@merchant.id}/items/#{@item1.id}")
+        expect(page).to have_content('Foo sometext')
       end
     end
   end
