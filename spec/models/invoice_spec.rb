@@ -7,4 +7,9 @@ RSpec.describe Invoice, type: :model do
     it { should have_many(:items).through(:invoice_items) }
   end
 
+  describe 'model methods' do
+    describe '#formatted_date' do
+      it "displays the date as 'Weekday, Month Day, Year'" do
+        
+
 end
