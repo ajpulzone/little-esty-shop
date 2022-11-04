@@ -21,12 +21,15 @@ RSpec.describe 'Merchants' do
         expect(current_path).to eq("/merchants/#{@merchant.id}/items/#{@item1.id}")
       end
 
-      it 'has at least one enable button' do
+      it 'has buttons to toggle between enabled/disabled items' do
         visit "/merchants/#{@merchant.id}/items"
         expect(page).to have_button('enable')
         first(:button, 'enable').click
         expect(current_path).to eq("/merchants/#{@merchant.id}/items")
         expect(page).to have_button('disable')
+        first(:button, 'disable').click
+        expect(current_path).to eq("/merchants/#{@merchant.id}/items")
+        expect(page).to have_button('enable')
       end
 
     end

@@ -15,9 +15,11 @@
       <% @merchant.items.each do |item| %>
         <tr>
           <td><%= link_to item.name, merchant_item_path(merchant_id: @merchant.id, id: item.id) %></td>
-          <%# if enabled display 'disable' button and vice versa%>
-          <td><%= button_to 'enable', merchant_item_path(merchant_id: @merchant.id, id: item.id), method: :patch, params: { enabled: true } %></td>
-          <%# button_to 'disable', merchant_items_path(merchant_id: @merchant.id), method: :get, params: { enabled: false } %>
+          <% if item.disabled? %>
+            <td><%= button_to 'enable', merchant_item_path(merchant_id: @merchant.id, id: item.id), method: :patch, params: { status: 'enabled' } %></td>
+            <% else %>
+            <td><%= button_to 'disable', merchant_item_path(merchant_id: @merchant.id, id: item.id), method: :patch, params: { status: 'disabled' } %></td>
+          <% end %>
         </tr>
       <% end %>
     </table>
