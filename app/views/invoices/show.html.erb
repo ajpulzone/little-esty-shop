@@ -1,0 +1,15 @@
+<h1>Merchant Invoices Show Page</h1>
+
+<p>Invoice #<%= @invoice.id %></p>
+
+<p>Status: 
+<% if @invoice.status == 2 %>
+  <%= "In Progress" %>
+<% elsif @invoice.status == 1 %>
+  <%= "Cancelled" %>
+<% elsif @invoice.status == 0 %>
+  <%= "Completed" %>
+<% end %></p>
+
+<p>Created on: <%= @invoice.formatted_date %></p>
+<p>Customer: <%= @invoice.customer.first_name %> <%= @invoice.customer.last_name %></p>
