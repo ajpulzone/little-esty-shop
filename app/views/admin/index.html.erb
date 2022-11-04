@@ -10,3 +10,12 @@
   </li>
 <% end %>
 </ul>
+
+<ul id=“admin-incomplete_invoices”>
+  <p>Incomplete Invoices (By Invoice ID): </p>
+    <% @invoices.each do |invoice| %>
+  <li>
+   <%= link_to invoice.id, admin_invoice_path %>
+  </li>
+<% end %>
+</ul>
