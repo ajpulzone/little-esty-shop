@@ -5,7 +5,7 @@
 </div>
 <div class="row">
   <div class="col d-flex justify-content-center p-3">
-    <%= button_to 'Create New Item', merchant_items_path(merchant_id: @merchant.id), {class: 'btn btn-primary'} %>
+    <%= link_to 'Create New Item', new_merchant_item_path(merchant_id: @merchant.id), {class: 'btn btn-primary'} %>
   </div>
 </div>
 <div class="row">
