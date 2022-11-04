@@ -7,4 +7,5 @@ class Item < ApplicationRecord
     disabled: 0,
     enabled: 1
   }
+
 end
