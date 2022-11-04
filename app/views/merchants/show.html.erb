@@ -1,3 +1,8 @@
 <h1> <%= @merchant.name %> </h1>
 <h5> <%= link_to "Merchant Items List", "/merchants/#{@merchant.id}/items" %> </h5>
 <h5> <%= link_to "Merchant Invoices Index", "/merchants/#{@merchant.id}/invoices" %> </h5>
+
+<div id="dashboard-items_to_ship">
+  <h3>Items Ready to Ship</h3>
+  <% binding.pry %>
+</div>

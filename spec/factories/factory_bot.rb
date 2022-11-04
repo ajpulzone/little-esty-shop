@@ -1,5 +1,4 @@
 require 'faker'
-require 'rails_helper'
 
 FactoryBot.define do
   factory :customer, class: Customer do
@@ -15,12 +14,22 @@ FactoryBot.define do
     name {Faker::Commerce.product_name}
     description {Faker::Marketing.buzzwords}
     unit_price {Faker::Number.within(range: 1000..10000)}
+    enabled {Faker::Number.within(range: 0..1)}
     association :merchant, factory: :merchant
   end
   
   factory :invoice, class: Invoice do
     status {Faker::Number.within(range: 0..2)}
     association :customer, factory: :customer
+  end
+  
+  factory :invoice_item, class: InvoiceItem do
+    # status_hash = {0 => 'pending', 1 => 'packaged', 2 => 'shipped'}
+    quantity {Faker::Number.within(range: 0..10)}
+    unit_price {Faker::Number.within(range: 1000..10000)}
+    status {Faker::Number.within(range: 0..2)}
+    association :invoice, factory: :invoice
+    association :item, factory: :item
   end
   
   factory :transaction, class: Transaction do
