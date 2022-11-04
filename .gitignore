@@ -28,3 +28,4 @@
 .DS_Store
 
 echo coverage >> .gitignore
+coverage

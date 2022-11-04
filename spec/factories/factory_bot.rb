@@ -1,0 +1,33 @@
+require 'faker'
+require 'rails_helper'
+
+FactoryBot.define do
+  factory :customer, class: Customer do
+    first_name {Faker::Name.first_name}
+    last_name {Faker::Name.last_name}
+  end
+  
+  factory :merchant, class: Merchant do
+    name {Faker::Name.name}
+  end
+  
+  factory :item, class: Item do
+    name {Faker::Commerce.product_name}
+    description {Faker::Marketing.buzzwords}
+    unit_price {Faker::Number.within(range: 1000..10000)}
+    association :merchant, factory: :merchant
+  end
+  
+  factory :invoice, class: Invoice do
+    status {Faker::Number.within(range: 0..2)}
+    association :customer, factory: :customer
+  end
+  
+  factory :transaction, class: Transaction do
+    result_hash = {0 => 'success', 1 => 'failed'}
+    credit_card_number {Faker::Bank.account_number}
+    cc_expiration_date {Faker::Date.between(from: '2022-09-23', to: '2027-09-25')}
+    result {result_hash[Faker::Number.within(range: 0..1)]}
+    association :invoice, factory: :invoice
+  end
+end
