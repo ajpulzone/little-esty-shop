@@ -16,9 +16,9 @@
         <tr>
           <td><%= link_to item.name, merchant_item_path(merchant_id: @merchant.id, id: item.id) %></td>
           <% if item.disabled? %>
-            <td><%= button_to 'enable', merchant_item_path(merchant_id: @merchant.id, id: item.id), method: :patch, params: { status: 'enabled' } %></td>
+            <td><%= button_to 'enable', merchant_item_path(merchant_id: @merchant.id, id: item.id), method: :patch, params: { status: 'enabled' }, class: 'btn btn-success' %></td>
             <% else %>
-            <td><%= button_to 'disable', merchant_item_path(merchant_id: @merchant.id, id: item.id), method: :patch, params: { status: 'disabled' } %></td>
+            <td><%= button_to 'disable', merchant_item_path(merchant_id: @merchant.id, id: item.id), method: :patch, params: { status: 'disabled' }, class: 'btn btn-danger' %></td>
           <% end %>
         </tr>
       <% end %>

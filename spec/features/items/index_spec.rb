@@ -5,6 +5,9 @@ RSpec.describe 'Merchants' do
     @merchant = Merchant.create!(name: 'FooMerchant')
     @item1 = @merchant.items.create!(name: 'fooItem')
     @item2 = @merchant.items.create!(name: 'barItem')
+
+    @item3 = @merchant.items.create(name: 'boo far', status: 0)
+    @item3 = @merchant.items.create(name: 'BAZ BOO', status: 1)
   end
 
   describe 'Items' do
@@ -31,6 +34,13 @@ RSpec.describe 'Merchants' do
         expect(current_path).to eq("/merchants/#{@merchant.id}/items")
         expect(page).to have_button('enable')
       end
+
+      it 'has some behaviour' do
+        visit "/merchants/#{@merchant.id}/items"
+        expect(page).to have_content('ENABLED ITEMS')
+        expect(page).to have_content('DISABLED ITEMS')
+      end
+
 
     end
   end
