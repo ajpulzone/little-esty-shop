@@ -8,5 +8,9 @@ class Merchant < ApplicationRecord
   def unique_invoices
     invoices.distinct
   end
+  
+  def invoices_not_shipped
+    invoice_items.where(status: ['0', '1'])
+  end
 
 end

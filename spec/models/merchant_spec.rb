@@ -22,12 +22,20 @@ RSpec.describe Merchant do
     @invoiceitem2 = InvoiceItem.create!(item: @item2, invoice: @invoice1, quantity: 1, unit_price: @item2.unit_price, status: 0 )
     @invoiceitem3 = InvoiceItem.create!(item: @item1, invoice: @invoice2, quantity: 1, unit_price: @item1.unit_price, status: 0 )
     @invoiceitem4 = InvoiceItem.create!(item: @item3, invoice: @invoice3, quantity: 1, unit_price: @item3.unit_price, status: 0 )
+    @invoiceitem5 = InvoiceItem.create!(item: @item3, invoice: @invoice2, quantity: 1, unit_price: @item1.unit_price, status: 1 )
+    @invoiceitem6 = InvoiceItem.create!(item: @item3, invoice: @invoice3, quantity: 1, unit_price: @item3.unit_price, status: 2 )
   end
 
   describe 'model methods' do
     describe '#unique_invoices' do
       it 'returns a unique list of invoices for a merchant' do
         expect(@merchant1.unique_invoices).to match([@invoice1, @invoice2])
+      end
+    end
+    
+    describe '#invoices_not_shipped' do
+      it "returns a list of invoices that are either 'packaged' or 'pending'" do
+        expect(@merchant2.invoices_not_shipped).to eq([@invoiceitem4, @invoiceitem5])
       end
     end
   end
