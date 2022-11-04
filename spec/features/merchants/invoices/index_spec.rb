@@ -1,11 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Merchant do
-  describe 'relationships' do
-    it { should have_many :items }
-    it { should have_many(:invoices).through(:items) }
-  end
-
+RSpec.describe 'the merchant invoices index page' do
   before :each do
     @merchant1 = Merchant.create!(name: "Billy's Baby Book Barn")
     @merchant2 = Merchant.create!(name: "Candy's Child Compendium Collection")
@@ -24,12 +19,23 @@ RSpec.describe Merchant do
     @invoiceitem4 = InvoiceItem.create!(item: @item3, invoice: @invoice3, quantity: 1, unit_price: @item3.unit_price, status: 0 )
   end
 
-  describe 'model methods' do
-    describe '#unique_invoices' do
-      it 'returns a unique list of invoices for a merchant' do
-        expect(@merchant1.unique_invoices).to match([@invoice1, @invoice2])
-      end
-    end
+  it 'displays all invoices that include one of the merchant items' do
+    visit "/merchants/#{@merchant1.id}/invoices"
+
+    expect(page).to have_content("Invoice ##{@invoice1.id}")
+    expect(page).to have_content("Invoice ##{@invoice2.id}")
+    expect(page).to_not have_content("Invoice ##{@invoice3.id}")
   end
 
+  it 'has the invoice id be a link to that invoices show page' do
+    visit "/merchants/#{@merchant1.id}/invoices"
+
+    expect(page).to have_link("#{@invoice1.id}")
+
+    click_on "#{@invoice1.id}"
+
+    expect(current_path).to eq("/merchants/#{@merchant1.id}/invoices/#{@invoice1.id}")
+  end
 end
+
+

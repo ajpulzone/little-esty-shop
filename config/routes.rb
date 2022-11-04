@@ -6,7 +6,13 @@ Rails.application.routes.draw do
   resources :merchants, only: [:index]
   
   resources :merchants do
+
+    resources :invoices, only: [:index, :show]
+
+
+
     resources :items, only: [:index, :show, :edit, :update]
+
   end
   
   # get "/admin", to: "admin#index"
