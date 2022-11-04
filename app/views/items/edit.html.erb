@@ -1,0 +1,32 @@
+<div class="row">
+  <div class="col border border-1">
+    <%= form_with(model: @item, url: merchant_item_path(merchant_id: @item.merchant_id, id: @item.id), method: :patch, local: true) do |form| %>
+      <% if @item.errors.any? %>
+        <div id="error_explanation">
+          <h2>
+            <%= pluralize(@item.errors.count, "error") %> prohibited
+            this item from being saved:
+          </h2>
+          <ul>
+            <% @item.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+      <div>
+        <%= form.label :name %>
+        <%= form.text_field :name %>
+      </div>
+      <div>
+        <%= form.label :description %>
+        <%= form.text_field :description %>
+      </div>
+      <div>
+        <%= form.label :unit_price %>
+        <%= form.text_field :unit_price %>
+      </div>
+      <%= form.submit %>
+    <% end %>
+  </div>
+</div>
