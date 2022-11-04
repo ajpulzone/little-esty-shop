@@ -15,6 +15,7 @@ class ItemsController < ApplicationController
   end
 
   def update
+    require 'pry'; binding.pry
     @item = Item.find(params[:id])
 
 
@@ -28,6 +29,6 @@ class ItemsController < ApplicationController
   private
 
   def item_params
-    params.require(:item).permit(:name, :description, :unit_price, :enabled, :disabled)
+    params.require(:item).permit(:name, :description, :unit_price, :enabled)
   end
 end
