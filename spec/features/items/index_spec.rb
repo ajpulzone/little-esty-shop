@@ -50,6 +50,28 @@ RSpec.describe 'Merchants' do
         end
       end
 
+      it 'can has a button to create new items' do
+        visit "/merchants/#{@merchant.id}/items"
+        expect(page).to have_link('Create New Item')
+        click_link('Create New Item')
+        expect(current_path).to eq("/merchants/#{@merchant.id}/items/new")
+      end
+
+      it 'can add a new item' do
+        visit "/merchants/#{@merchant.id}/items/new"
+
+        fill_in "Name",	with: "Item Foo Bar"
+        fill_in "Description",	with: "Nihil autem sit odio inventore deleniti. Est laudantium ratione distinctio laborum. Minus voluptatem nesciunt assumenda dicta voluptatum porro."
+        fill_in "Unit price",	with: 33351
+        click_button('Submit')
+        expect(current_path).to eq("/merchants/#{@merchant.id}/items")
+        within("#disabled_items") do
+          expect(page).to have_content("Item Foo Bar")
+        end
+
+      end
+
+
     end
   end
 end
