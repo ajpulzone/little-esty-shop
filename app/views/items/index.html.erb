@@ -5,30 +5,30 @@
 </div>
 <div class="row">
   <div class="col d-flex justify-content-center p-3">
-    <%= button_to 'Create New Item', merchant_items_path(merchant_id: @merchant.id), {class: 'btn btn-primary'} %>
+    <%= link_to 'Create New Item', new_merchant_item_path(merchant_id: @merchant.id), {class: 'btn btn-primary'} %>
   </div>
 </div>
 <div class="row">
   <div class="col border border-1">
     <h3>ENABLED ITEMS</h3>
-    <table class="table">
+    <table class="table" id="enabled_items">
       <% @merchant.items.each do |item| %>
         <tr>
-          <td><%= link_to item.name, merchant_item_path(merchant_id: @merchant.id, id: item.id) %></td>
-          <%# if enabled display 'disable' button and vice versa%>
-          <td><%= button_to 'enable', merchant_items_path(merchant_id: @merchant.id), method: :get, params: { enabled: true } %></td>
-          <%# button_to 'disable', merchant_items_path(merchant_id: @merchant.id), method: :get, params: { enabled: false } %>
+          <% if item.enabled? %>
+            <td><%= link_to item.name, merchant_item_path(merchant_id: @merchant.id, id: item.id) %></td>
+            <td><%= button_to 'disable', merchant_item_path(merchant_id: @merchant.id, id: item.id), method: :patch, params: { status: 'disabled' }, class: 'btn btn-danger' %></td>
+          <% end %>
         </tr>
       <% end %>
     </table>
     <h3>DISABLED ITEMS</h3>
-    <table class="table">
+    <table class="table" id="disabled_items">
       <% @merchant.items.each do |item| %>
         <tr>
-          <td><%= link_to item.name, merchant_item_path(merchant_id: @merchant.id, id: item.id) %></td>
-          <%# if enabled display 'disable' button and vice versa%>
-          <td><%= button_to 'enable', merchant_items_path(merchant_id: @merchant.id), method: :get, params: { enabled: true } %></td>
-          <%# button_to 'disable', merchant_items_path(merchant_id: @merchant.id), method: :get, params: { enabled: false } %>
+          <% if item.disabled? %>
+            <td><%= link_to item.name, merchant_item_path(merchant_id: @merchant.id, id: item.id) %></td>
+            <td><%= button_to 'enable', merchant_item_path(merchant_id: @merchant.id, id: item.id), method: :patch, params: { status: 'enabled' }, class: 'btn btn-success' %></td>
+          <% end %>
         </tr>
       <% end %>
     </table>
