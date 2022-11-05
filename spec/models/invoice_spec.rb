@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Invoice, type: :model do
+
   describe 'relationships' do
     it { should belong_to :customer }
     it { should have_many :invoice_items }
@@ -19,6 +20,11 @@ RSpec.describe Invoice, type: :model do
     @invoice1 = @mary.invoices.create!(status: 2)
     @invoice2 = @daniel.invoices.create!(status: 2)
     @invoice3 = @annie.invoices.create!(status: 2)
+    @invoiceitem1 = InvoiceItem.create!(item: @item1, invoice: @invoice1, quantity: 1, unit_price: @item1.unit_price, status: 0 )
+    @invoiceitem2 = InvoiceItem.create!(item: @item2, invoice: @invoice1, quantity: 2, unit_price: @item2.unit_price, status: 0 )
+    @invoiceitem3 = InvoiceItem.create!(item: @item1, invoice: @invoice2, quantity: 1, unit_price: @item1.unit_price, status: 0 )
+    @invoiceitem4 = InvoiceItem.create!(item: @item3, invoice: @invoice3, quantity: 1, unit_price: @item3.unit_price, status: 0 )
+    @invoiceitem5 = InvoiceItem.create!(item: @item3, invoice: @invoice1, quantity: 1, unit_price: @item1.unit_price, status: 0 )
   end
 
   describe 'model methods' do
@@ -28,7 +34,14 @@ RSpec.describe Invoice, type: :model do
       end
     end
 
+    describe '#invoice_revenue' do
+      it 'returns the total revenue for items sold on this invoice' do
+        expect(@invoice1.invoice_revenue).to eq(5400)
+      end
+    end
+
     describe "#incomplete_invoices" do
+    
       before(:each)do
         @customer_1 = Customer.create!(first_name: "Luke", last_name: "Harison")
         
@@ -58,8 +71,7 @@ RSpec.describe Invoice, type: :model do
 
       it "returns a list of all unique invoices that have items that have not been shipped from newest to oldest based on when
         the invoice was created " do
-        expect(Invoice.incomplete_invoices).to eq([@invoice_1, @invoice_2])
-      end
-    end
-  end
+          expect(Invoice.incomplete_invoices).to eq([@invoice_1, @invoice_2])
+      end 
+   end 
 end
