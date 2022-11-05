@@ -23,7 +23,7 @@ RSpec.describe 'the merchant invoices show page' do
 
   it 'displays the id/status/date/customer name related to the invoice' do
     visit "/merchants/#{@merchant1.id}/invoices/#{@invoice1.id}"
-    save_and_open_page
+
     expect(page).to have_content("Invoice ##{@invoice1.id}")
     expect(page).to have_content("Status: in progress")
     expect(page).to have_content("Created on: #{@invoice1.created_at.strftime('%A, %B%e, %Y')}")
@@ -32,16 +32,20 @@ RSpec.describe 'the merchant invoices show page' do
 
   it 'display name/quantity/price/status for all invoice items' do
     visit "/merchants/#{@merchant1.id}/invoices/#{@invoice1.id}"
-    
-    expect(page).to have_content(@item1.name)
-    expect(page).to have_content(@item2.name)
-    expect(page).to_not have_content(@item3.name)
-    expect(page).to have_content(@invoiceitem1.quantity)
-    expect(page).to have_content(@invoiceitem2.quantity)
-    expect(page).to have_content(@item1.unit_price)
-    expect(page).to have_content(@item2.unit_price)
-    expect(page).to have_content(@invoiceitem1.status)
-    expect(page).to have_content(@invoiceitem2.status)
+    save_and_open_page
+    within "#invoice_item_#{@invoiceitem1.id}" do
+      expect(page).to have_content(@item1.name)
+      expect(page).to have_content(@invoiceitem1.quantity)
+      expect(page).to have_content("Unit Price: $24.00")
+      expect(page).to have_content(@invoiceitem1.status)
+    end
+
+    within "#invoice_item_#{@invoiceitem2.id}" do
+      expect(page).to have_content(@item2.name)
+      expect(page).to have_content(@invoiceitem2.quantity)
+      expect(page).to have_content("Unit Price: $15.00")
+      expect(page).to have_content(@invoiceitem2.status)
+    end
   end
 
   it 'display the total revenue for items sold on this invoice' do
