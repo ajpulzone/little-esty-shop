@@ -7,7 +7,8 @@ RSpec.describe Merchant do
   end
 
   describe 'validations' do
-    it {should validate_presence_of :name}
+    it { should validate_presence_of :name}
+    it { should define_enum_for(:status). with_values(disabled: 0, enabled: 1) }
   end
 
   before :each do
