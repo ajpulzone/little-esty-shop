@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Admin Dashboard (Index", type: :feature do
+RSpec.describe "Admin Dashboard (Index Page)", type: :feature do
   
   before(:each) do
 
