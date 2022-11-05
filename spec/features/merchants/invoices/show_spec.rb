@@ -23,9 +23,9 @@ RSpec.describe 'the merchant invoices show page' do
 
   it 'displays the id/status/date/customer name related to the invoice' do
     visit "/merchants/#{@merchant1.id}/invoices/#{@invoice1.id}"
-
+    save_and_open_page
     expect(page).to have_content("Invoice ##{@invoice1.id}")
-    expect(page).to have_content("Status: In Progress")
+    expect(page).to have_content("Status: in progress")
     expect(page).to have_content("Created on: #{@invoice1.created_at.strftime('%A, %B%e, %Y')}")
     expect(page).to have_content("Customer: #{@mary.first_name} #{@mary.last_name}")
   end
