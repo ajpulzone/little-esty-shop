@@ -1,10 +1,21 @@
 <h1>Admin Merchants</h1>
 
-<ul id="admin-merchants">
-  <p>List of Merchants: </p>
+  <p>Enabled Merchants: </p>
+<ul id="admin-enabled_merchants">
     <% @merchants.each do |merchant| %>
+    <% if merchant.enabled? %>
   <li>
-   Merchant Name: <%= merchant.name %>
+   Name: <%= merchant.name %>
+  </li>
+<% end %>
+<% end %>
+</ul>
+
+<p>Disabled Merchants: </p>
+<ul id="admin-disabled_merchants">
+    <% @merchants.merchant_status(0).each do |merchant| %>
+  <li>
+   Name: <%= merchant.name %>
   </li>
 <% end %>
 </ul>
