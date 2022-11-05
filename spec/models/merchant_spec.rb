@@ -6,6 +6,10 @@ RSpec.describe Merchant do
     it { should have_many(:invoices).through(:items) }
   end
 
+  describe 'validations' do
+    it {should validate_presence_of :name}
+  end
+
   before :each do
     @merchant1 = Merchant.create!(name: "Billy's Baby Book Barn")
     @merchant2 = Merchant.create!(name: "Candy's Child Compendium Collection")
@@ -41,5 +45,4 @@ RSpec.describe Merchant do
       end
     end
   end
-
 end
