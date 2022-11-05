@@ -14,9 +14,11 @@ RSpec.describe 'the merchant invoices show page' do
     @invoice2 = @daniel.invoices.create!(status: 2)
     @invoice3 = @annie.invoices.create!(status: 2)
     @invoiceitem1 = InvoiceItem.create!(item: @item1, invoice: @invoice1, quantity: 1, unit_price: @item1.unit_price, status: 0 )
-    @invoiceitem2 = InvoiceItem.create!(item: @item2, invoice: @invoice1, quantity: 1, unit_price: @item2.unit_price, status: 0 )
+    @invoiceitem2 = InvoiceItem.create!(item: @item2, invoice: @invoice1, quantity: 2, unit_price: @item2.unit_price, status: 0 )
     @invoiceitem3 = InvoiceItem.create!(item: @item1, invoice: @invoice2, quantity: 1, unit_price: @item1.unit_price, status: 0 )
     @invoiceitem4 = InvoiceItem.create!(item: @item3, invoice: @invoice3, quantity: 1, unit_price: @item3.unit_price, status: 0 )
+    @invoiceitem5 = InvoiceItem.create!(item: @item3, invoice: @invoice1, quantity: 1, unit_price: @item1.unit_price, status: 0 )
+
   end
 
   it 'displays the id/status/date/customer name related to the invoice' do
@@ -26,5 +28,27 @@ RSpec.describe 'the merchant invoices show page' do
     expect(page).to have_content("Status: In Progress")
     expect(page).to have_content("Created on: #{@invoice1.created_at.strftime('%A, %B%e, %Y')}")
     expect(page).to have_content("Customer: #{@mary.first_name} #{@mary.last_name}")
+  end
+
+  # As a merchant
+  # When I visit my merchant invoice show page
+  # Then I see all of my items on the invoice including:
+  # - Item name
+  # - The quantity of the item ordered
+  # - The price the Item sold for
+  # - The Invoice Item status
+  # And I do not see any information related to Items for other merchants
+  it 'display name/quantity/price/status for all invoice items' do
+    visit "/merchants/#{@merchant1.id}/invoices/#{@invoice1.id}"
+    
+    expect(page).to have_content(@item1.name)
+    expect(page).to have_content(@item2.name)
+    expect(page).to_not have_content(@item3.name)
+    expect(page).to have_content(@invoiceitem1.quantity)
+    expect(page).to have_content(@invoiceitem2.quantity)
+    expect(page).to have_content(@item1.unit_price)
+    expect(page).to have_content(@item2.unit_price)
+    expect(page).to have_content(@invoiceitem1.status)
+    expect(page).to have_content(@invoiceitem2.status)
   end
 end
