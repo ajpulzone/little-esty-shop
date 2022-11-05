@@ -31,38 +31,36 @@ RSpec.describe 'Merchant Dashboard' do
     ordered my item And each invoice id is a link to my merchant's invoice show
     page" do
       merchant = create(:merchant)
-      items_1 = create_list(:item, 5, merchant: merchant)
-      items_2 = create_list(:item, 5, merchant: merchant)
+      item_1 = create(:item, merchant: merchant)
+      item_2 = create(:item, merchant: merchant)
+      item_3 = create(:item, merchant: merchant)
       customer1 = create(:customer)
       customer2 = create(:customer)
+      customer3 = create(:customer)
       customer1_invoice = create(:invoice, customer: customer1)
       customer2_invoice = create(:invoice, customer: customer2)
+      customer3_invoice = create(:invoice, customer: customer3)
       
-      customer1_invoice_items = []
-      customer2_invoice_items = []
-      for i in 0..4 do
-        customer1_invoice_items << create(:invoice_item, invoice: customer1_invoice, item: items_1[i])
-        customer2_invoice_items << create(:invoice_item, invoice: customer2_invoice, item: items_2[i])
-      end
+      customer1_invoice_item = create(:invoice_item, invoice: customer1_invoice, item: item_1, status: 0)
+      customer2_invoice_item = create(:invoice_item, invoice: customer2_invoice, item: item_2, status: 1)
+      customer3_invoice_item = create(:invoice_item, invoice: customer3_invoice, item: item_3, status: 2)
+      
       visit "/merchants/#{merchant.id}/dashboard"
       
       expect(page).to have_content('Items Ready to Ship')
-      
-      not_shipped = customer1_invoice_items.select {|item| item.status != 2}.concat(customer2_invoice_items.select {|item| item.status != 2})
-      # require "pry"; binding.pry
       within("#dashboard-items_to_ship") do
-        not_shipped.size.times do
-          i = 0
-          expect(page).to have_content(not_shipped[i].item.name)
-          expect(page).to have_link(not_shipped[i].item.id)
-          i += 1
-        end
+        expect(page).to have_content(item_1.name)
+        expect(page).to have_content(item_2.name)
+        expect(page).to_not have_content(item_3.name)
+        
+        expect(page).to have_link(customer1_invoice.id)
+        expect(page).to have_link(customer2_invoice.id)
+        expect(page).to_not have_link(customer3_invoice.id)
       end
       
-      click_link "#{not_shipped.first.item.id}"
+      click_link "#{customer1_invoice.id}"
       
-      # Filepath for merchant invoice show page?
-      expect(current_path).to eq("/merchants/invoices/#{not_shipped.first.item.id}")
+      expect(current_path).to eq("/merchants/#{merchant.id}/invoices/#{customer1_invoice.id}")
     end
     
     xit "I see the names of the top 5 customers who have conducted the largest
