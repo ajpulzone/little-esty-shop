@@ -14,7 +14,7 @@ FactoryBot.define do
     name {Faker::Commerce.product_name}
     description {Faker::Marketing.buzzwords}
     unit_price {Faker::Number.within(range: 1000..10000)}
-    enabled {Faker::Number.within(range: 0..1)}
+    status {0}
     association :merchant, factory: :merchant
   end
   
