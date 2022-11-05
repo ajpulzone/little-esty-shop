@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Invoice, type: :model do
+
   describe 'relationships' do
     it { should belong_to :customer }
     it { should have_many :invoice_items }
@@ -39,8 +40,8 @@ RSpec.describe Invoice, type: :model do
       end
     end
 
-
     describe "#incomplete_invoices" do
+    
       before(:each)do
         @customer_1 = Customer.create!(first_name: "Luke", last_name: "Harison")
         
@@ -70,8 +71,7 @@ RSpec.describe Invoice, type: :model do
 
       it "returns a list of all unique invoices that have items that have not been shipped from newest to oldest based on when
         the invoice was created " do
-        expect(Invoice.incomplete_invoices).to eq([@invoice_1, @invoice_2])
-      end
-    end
-  end
+          expect(Invoice.incomplete_invoices).to eq([@invoice_1, @invoice_2])
+      end 
+   end 
 end
