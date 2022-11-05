@@ -39,7 +39,6 @@ RSpec.describe 'Merchants' do
         visit "/merchants/#{@merchant.id}/items"
         expect(page).to have_content('ENABLED ITEMS')
         expect(page).to have_content('DISABLED ITEMS')
-        save_and_open_page
         within("#enabled_items") do
           expect(page).not_to have_button("enable")
           expect(page).to have_button("disable")

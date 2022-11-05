@@ -12,16 +12,4 @@ RSpec.describe Item do
     it { should have_many :invoice_items }
     it { should have_many(:invoices).through(:invoice_items) }
   end
-
-  describe 'instance methods' do
-    describe 'enabled_items' do
-      it 'has some behaviour' do
-        @merchant.items.enabled_items.each do |item|
-          expect(item).to eq(@item2)
-        end
-      end
-
-    end
-  end
-
 end
