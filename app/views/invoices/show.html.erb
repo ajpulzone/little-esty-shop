@@ -12,6 +12,7 @@
 <% end %></p>
 
 <p>Created on: <%= @invoice.formatted_date %></p>
+<p>Total Revenue: <%= number_to_currency(@merchant.invoice_revenue(@invoice.id) / 100) %>
 <p>Customer: <%= @invoice.customer.first_name %> <%= @invoice.customer.last_name %></p>
 
 <% @merchant.items_for_this_invoice(@invoice.id).each do |invoice_item| %>

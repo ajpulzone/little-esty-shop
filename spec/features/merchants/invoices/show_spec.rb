@@ -30,14 +30,6 @@ RSpec.describe 'the merchant invoices show page' do
     expect(page).to have_content("Customer: #{@mary.first_name} #{@mary.last_name}")
   end
 
-  # As a merchant
-  # When I visit my merchant invoice show page
-  # Then I see all of my items on the invoice including:
-  # - Item name
-  # - The quantity of the item ordered
-  # - The price the Item sold for
-  # - The Invoice Item status
-  # And I do not see any information related to Items for other merchants
   it 'display name/quantity/price/status for all invoice items' do
     visit "/merchants/#{@merchant1.id}/invoices/#{@invoice1.id}"
     
@@ -51,4 +43,11 @@ RSpec.describe 'the merchant invoices show page' do
     expect(page).to have_content(@invoiceitem1.status)
     expect(page).to have_content(@invoiceitem2.status)
   end
+
+  it 'display the total revenue for items sold on this invoice' do
+    visit "/merchants/#{@merchant1.id}/invoices/#{@invoice1.id}"
+
+    expect(page).to have_content("Total Revenue: $54.00")
+  end
+
 end
