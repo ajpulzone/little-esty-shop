@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   # feel free to remove or change or delete this resource; ask MM if you have any questions about it
 
   resources :merchants, only: [:index]
+  
+  get 'merchants/:id/dashboard', to: 'merchants#show'
 
   resources :merchants do
     resources :invoices, only: %i[index show]

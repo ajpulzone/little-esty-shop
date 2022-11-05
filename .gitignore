@@ -28,4 +28,6 @@
 .DS_Store
 
 echo coverage >> .gitignore
-coverage/
+
+/coverage/
+Gemfile.lock

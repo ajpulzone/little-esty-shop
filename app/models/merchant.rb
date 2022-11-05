@@ -14,4 +14,9 @@ class Merchant < ApplicationRecord
   def invoice_revenue(invoice_id)
     items_for_this_invoice(invoice_id).sum('invoice_items.unit_price * invoice_items.quantity')
   end
+  
+  def invoices_not_shipped
+    invoice_items.where(status: ['0', '1'])
+  end
+
 end
