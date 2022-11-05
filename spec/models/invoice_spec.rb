@@ -59,8 +59,6 @@ RSpec.describe Invoice, type: :model do
       it "returns a list of all unique invoices that have items that have not been shipped from newest to oldest based on when
         the invoice was created " do
         expect(Invoice.incomplete_invoices).to eq([@invoice_1, @invoice_2])
-        expect(Invoice.incomplete_invoices).to_not eq([@invoice_2, @invoice_1])
-        expect(Invoice.incomplete_invoices).to_not include(@invoice_3)
       end
     end
   end

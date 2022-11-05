@@ -97,14 +97,6 @@ RSpec.describe "Admin Dashboard (Index Page)", type: :feature do
       visit "/admin/dashboard"
 
       within("#dashboard-customers") do
-        expect(page).to have_content("Name: #{@customer_1.first_name} #{@customer_1.last_name}")
-        expect(page).to have_content("Name: #{@customer_2.first_name} #{@customer_2.last_name}")
-        expect(page).to have_content("Name: #{@customer_3.first_name} #{@customer_3.last_name}")
-        expect(page).to have_content("Name: #{@customer_5.first_name} #{@customer_5.last_name}")
-        expect(page).to have_content("Name: #{@customer_7.first_name} #{@customer_7.last_name}")
-      end 
-
-      within("#dashboard-customers") do
         expect("#{@customer_3.first_name} #{@customer_3.last_name}").to appear_before("#{@customer_1.first_name} #{@customer_1.last_name}")
         expect("#{@customer_1.first_name} #{@customer_1.last_name}").to appear_before("#{@customer_2.first_name} #{@customer_2.last_name}")
         expect("#{@customer_5.first_name} #{@customer_5.last_name}").to appear_before("#{@customer_7.first_name} #{@customer_7.last_name}")
@@ -161,7 +153,7 @@ RSpec.describe "Admin Dashboard (Index Page)", type: :feature do
     visit "/admin/dashboard"
 
       within("#dashboard-incomplete_invoices") do
-        expect("#{@invoice_2.id}").to appear_before("#{@invoice_1.id}")
+        expect("#{@invoice_1.id}").to appear_before("#{@invoice_2.id}")
       end 
 
       within("#dashboard-incomplete_invoices") do

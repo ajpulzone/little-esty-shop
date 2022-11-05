@@ -13,7 +13,7 @@
 
 <ul id="dashboard-incomplete_invoices">
   <p>Incomplete Invoices: </p>
-    <% @invoices.incomplete_invoices.reverse_order.each do |invoice| %>
+    <% @invoices.incomplete_invoices.each do |invoice| %>
   <li>
    Invoice #: <%= link_to "#{invoice.id}", admin_invoice_path(invoice.id) %>, Created At: <%= invoice.formatted_date %>
   </li>
