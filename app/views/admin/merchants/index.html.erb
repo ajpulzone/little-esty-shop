@@ -1,0 +1,10 @@
+<h1>Admin Merchants</h1>
+
+<ul id="admin-merchants">
+  <p>List of Merchants: </p>
+    <% @merchants.each do |merchant| %>
+  <li>
+   Merchant Name: <%= merchant.name %>
+  </li>
+<% end %>
+</ul>
