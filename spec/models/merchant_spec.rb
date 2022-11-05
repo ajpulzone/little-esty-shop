@@ -3,7 +3,8 @@ require 'rails_helper'
 RSpec.describe Merchant do
   describe 'relationships' do
     it { should have_many :items }
-    it { should have_many(:invoices).through(:items) }
+    it { should have_many(:invoice_items).through(:items)}
+    it { should have_many(:invoices).through(:invoice_items) }
   end
 
   describe 'validations' do
@@ -25,7 +26,7 @@ RSpec.describe Merchant do
     @invoice2 = @daniel.invoices.create!(status: 2)
     @invoice3 = @annie.invoices.create!(status: 2)
     @invoiceitem1 = InvoiceItem.create!(item: @item1, invoice: @invoice1, quantity: 1, unit_price: @item1.unit_price, status: 0 )
-    @invoiceitem2 = InvoiceItem.create!(item: @item2, invoice: @invoice1, quantity: 1, unit_price: @item2.unit_price, status: 0 )
+    @invoiceitem2 = InvoiceItem.create!(item: @item2, invoice: @invoice1, quantity: 2, unit_price: @item2.unit_price, status: 0 )
     @invoiceitem3 = InvoiceItem.create!(item: @item1, invoice: @invoice2, quantity: 1, unit_price: @item1.unit_price, status: 0 )
     @invoiceitem4 = InvoiceItem.create!(item: @item3, invoice: @invoice3, quantity: 1, unit_price: @item3.unit_price, status: 0 )
     @invoiceitem5 = InvoiceItem.create!(item: @item4, invoice: @invoice2, quantity: 1, unit_price: @item1.unit_price, status: 1 )
@@ -38,6 +39,17 @@ RSpec.describe Merchant do
         expect(@merchant1.unique_invoices).to match([@invoice1, @invoice2])
       end
     end
+
+    describe '#invoice_items_for_this_invoice' do
+      it 'returns invoice items only for this invoice' do
+        expect(@merchant1.items_for_this_invoice(@invoice1.id)).to match([@invoiceitem1, @invoiceitem2])
+      end
+    end
+
+    describe '#invoice_revenue' do
+      it 'returns the total revenue for items sold on this invoice' do
+        expect(@merchant1.invoice_revenue(@invoice1.id)).to eq(5400)
+      end
     
     describe '#invoices_not_shipped' do
       it "returns a list of items for invoices that are either 'packaged' or 'pending'" do
