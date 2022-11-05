@@ -19,6 +19,11 @@ RSpec.describe Invoice, type: :model do
     @invoice1 = @mary.invoices.create!(status: 2)
     @invoice2 = @daniel.invoices.create!(status: 2)
     @invoice3 = @annie.invoices.create!(status: 2)
+    @invoiceitem1 = InvoiceItem.create!(item: @item1, invoice: @invoice1, quantity: 1, unit_price: @item1.unit_price, status: 0 )
+    @invoiceitem2 = InvoiceItem.create!(item: @item2, invoice: @invoice1, quantity: 2, unit_price: @item2.unit_price, status: 0 )
+    @invoiceitem3 = InvoiceItem.create!(item: @item1, invoice: @invoice2, quantity: 1, unit_price: @item1.unit_price, status: 0 )
+    @invoiceitem4 = InvoiceItem.create!(item: @item3, invoice: @invoice3, quantity: 1, unit_price: @item3.unit_price, status: 0 )
+    @invoiceitem5 = InvoiceItem.create!(item: @item3, invoice: @invoice1, quantity: 1, unit_price: @item1.unit_price, status: 0 )
   end
 
   describe 'model methods' do
@@ -27,6 +32,13 @@ RSpec.describe Invoice, type: :model do
         expect(@invoice1.formatted_date).to eq(@invoice1.created_at.strftime('%A, %B%e, %Y'))
       end
     end
+
+    # describe '#invoice_joins' do
+    #   it 'returns the item name and invoice_item quantity/unit_price/status' do
+    #     expect(@invoice1.invoice_joins).to eq("something")
+    #   end
+    # end
+
   end
 
 end

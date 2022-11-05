@@ -3,7 +3,8 @@ require 'rails_helper'
 RSpec.describe Merchant do
   describe 'relationships' do
     it { should have_many :items }
-    it { should have_many(:invoices).through(:items) }
+    it { should have_many(:invoice_items).through(:items)}
+    it { should have_many(:invoices).through(:invoice_items) }
   end
 
   before :each do
@@ -28,6 +29,12 @@ RSpec.describe Merchant do
     describe '#unique_invoices' do
       it 'returns a unique list of invoices for a merchant' do
         expect(@merchant1.unique_invoices).to match([@invoice1, @invoice2])
+      end
+    end
+
+    describe '#invoice_items_for_this_invoice' do
+      it 'returns invoice items only for this invoice' do
+        expect(@merchant1.invoice_items_for_this_invoice(@invoice1)).to match([@invoiceitem1, @invoiceitem2])
       end
     end
   end
