@@ -9,15 +9,12 @@ Rails.application.routes.draw do
 
   resources :merchants do
     resources :invoices, only: %i[index show]
-
     resources :items, only: %i[index show new create edit update]
   end
 
-  # get "/admin", to: "admin#index"
-  resources :admin, only: [:index]
-
   namespace :admin do
-      resources :merchants, only: [:index]
-      resources :invoices, only: [:index]
+    resources :dashboard, only: [:index, :show]
+    resources :invoices, only: [:index, :show]
+    resources :merchants, only: [:index, :show]
   end
 end
