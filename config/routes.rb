@@ -6,23 +6,13 @@ Rails.application.routes.draw do
   resources :merchants, only: [:index]
   
   resources :merchants do
-
     resources :invoices, only: [:index, :show]
-
-
-
-    resources :items, only: [:index, :show, :edit, :update]
-
+    resources :items, only: [:index, :show, :edit, :update]  
   end
-  
-  # get "/admin", to: "admin#index"
-  resources :admin, only: [:index]
-    namespace :admin, only: [:index] do
-    resources :invoices, only: [:show]
-  end 
 
-  # namespace :admin do
-  #     resources :merchants, only: [:index]
-  #     resources :invoices, only: [:index]
-    # end
+  namespace :admin do
+    resources :dashboard, only: [:index, :show]
+    resources :invoices, only: [:index, :show]
+    resources :merchants, only: [:index, :show]
+  end
 end
