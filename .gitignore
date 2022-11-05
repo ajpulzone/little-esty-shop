@@ -30,3 +30,4 @@
 echo coverage >> .gitignore
 
 /coverage/
+Gemfile.lock
