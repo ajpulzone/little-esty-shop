@@ -20,7 +20,7 @@ RSpec.describe Merchant do
     @invoice2 = @daniel.invoices.create!(status: 2)
     @invoice3 = @annie.invoices.create!(status: 2)
     @invoiceitem1 = InvoiceItem.create!(item: @item1, invoice: @invoice1, quantity: 1, unit_price: @item1.unit_price, status: 0 )
-    @invoiceitem2 = InvoiceItem.create!(item: @item2, invoice: @invoice1, quantity: 1, unit_price: @item2.unit_price, status: 0 )
+    @invoiceitem2 = InvoiceItem.create!(item: @item2, invoice: @invoice1, quantity: 2, unit_price: @item2.unit_price, status: 0 )
     @invoiceitem3 = InvoiceItem.create!(item: @item1, invoice: @invoice2, quantity: 1, unit_price: @item1.unit_price, status: 0 )
     @invoiceitem4 = InvoiceItem.create!(item: @item3, invoice: @invoice3, quantity: 1, unit_price: @item3.unit_price, status: 0 )
   end
@@ -34,7 +34,13 @@ RSpec.describe Merchant do
 
     describe '#invoice_items_for_this_invoice' do
       it 'returns invoice items only for this invoice' do
-        expect(@merchant1.invoice_items_for_this_invoice(@invoice1)).to match([@invoiceitem1, @invoiceitem2])
+        expect(@merchant1.items_for_this_invoice(@invoice1)).to match([@invoiceitem1, @invoiceitem2])
+      end
+    end
+
+    describe '#invoice_revenue' do
+      it 'returns the total revenue for items sold on this invoice' do
+        expect(@merchant1.invoice_revenue(@invoice1)).to eq(5400)
       end
     end
   end

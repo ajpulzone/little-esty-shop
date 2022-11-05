@@ -33,11 +33,11 @@ RSpec.describe Invoice, type: :model do
       end
     end
 
-    # describe '#invoice_joins' do
-    #   it 'returns the item name and invoice_item quantity/unit_price/status' do
-    #     expect(@invoice1.invoice_joins).to eq("something")
-    #   end
-    # end
+    describe '#invoice_revenue' do
+      it 'returns the total revenue for items sold on this invoice' do
+        expect(@invoice1.invoice_revenue).to eq(5400)
+      end
+    end
 
   end
 
