@@ -37,13 +37,13 @@ RSpec.describe Merchant do
 
     describe '#invoice_items_for_this_invoice' do
       it 'returns invoice items only for this invoice' do
-        expect(@merchant1.items_for_this_invoice(@invoice1)).to match([@invoiceitem1, @invoiceitem2])
+        expect(@merchant1.items_for_this_invoice(@invoice1.id)).to match([@invoiceitem1, @invoiceitem2])
       end
     end
 
     describe '#invoice_revenue' do
       it 'returns the total revenue for items sold on this invoice' do
-        expect(@merchant1.invoice_revenue(@invoice1)).to eq(5400)
+        expect(@merchant1.invoice_revenue(@invoice1.id)).to eq(5400)
       end
     
     describe '#invoices_not_shipped' do
