@@ -50,6 +50,7 @@ RSpec.describe Merchant do
       it 'returns the total revenue for items sold on this invoice' do
         expect(@merchant1.invoice_revenue(@invoice1.id)).to eq(5400)
       end
+    end 
     
     describe '#invoices_not_shipped' do
       it "returns a list of items for invoices that are either 'packaged' or 'pending'" do
