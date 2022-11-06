@@ -4,8 +4,8 @@
 <ul id="admin-enabled_merchants">
     <% @merchants.each do |merchant| %>
     <% if merchant.enabled? %>
-  <li>
-   Name: <%= merchant.name %>
+  <li id="enab_merchant-<%= merchant.id%>">
+   Name: <%= merchant.name %> <%= button_to 'Disable?', admin_merchant_path(merchant.id), form: {style: "display:inline-block;"}, method: :patch, params: { status: 'disabled' } %>
   </li>
 <% end %>
 <% end %>
@@ -13,9 +13,11 @@
 
 <p>Disabled Merchants: </p>
 <ul id="admin-disabled_merchants">
-    <% @merchants.merchant_status(0).each do |merchant| %>
-  <li>
-   Name: <%= merchant.name %>
+    <% @merchants.each do |merchant| %>
+    <% if merchant.disabled? %>
+  <li id="disab_merchant-<%= merchant.id%>">
+    Name: <%= merchant.name %> <%= button_to 'Enable?', admin_merchant_path(merchant.id), form: {style: "display:inline-block;"}, method: :patch, params: { status: 'enabled' } %></p>
   </li>
+<% end %>
 <% end %>
 </ul>

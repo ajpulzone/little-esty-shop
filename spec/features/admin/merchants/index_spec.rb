@@ -73,7 +73,7 @@ RSpec.describe "Admin Merchants Index Page", type: :feature do
     @transaction_20 = @invoice_20.transactions.create!(credit_card_number: 4886443388914010, result: "success")
   end
 
-  xit "has the names of each merchant in the system" do
+  it "has the names of each merchant in the system" do
     visit "/admin/merchants"
 
     expect(page).to have_content(@merchant_1.name)
@@ -81,37 +81,59 @@ RSpec.describe "Admin Merchants Index Page", type: :feature do
     expect(page).to have_content(@merchant_3.name)
   end
 
-  xit "there are 2 sections: one for 'Enabled Merchants' and one for 'Disabled Merchants'
+  it "there are 2 sections: one for 'Enabled Merchants' and one for 'Disabled Merchants'
     and each merchant is listed in the appropriate section" do
       visit "/admin/merchants"
 
-      within("@admin-enabled_merchants") do
+      within("#admin-enabled_merchants") do
         expect(page).to have_content(@merchant_1.name)
         expect(page).to have_content(@merchant_2.name)
         expect(page).to have_no_content(@merchant_3.name)
       end
 
-      within("@admin-disabled_merchants") do
+      within("#admin-disabled_merchants") do
         expect(page).to have_content(@merchant_3.name)
         expect(page).to have_no_content(@merchant_1.name)
         expect(page).to have_no_content(@merchant_2.name)
       end
     end
 
-  xit "next to each merchants name there is a button to disable/enable that merchant" do
+  it "next to each merchants name there is a button to disable/enable that merchant" do
     visit "/admin/merchants"
 
-    
+    within("#enab_merchant-#{@merchant_1.id}") do
+      have_button?("Disable?")
+    end
 
+    within("#enab_merchant-#{@merchant_2.id}") do
+      have_button?("Disable?")
+    end
+
+    within("#disab_merchant-#{@merchant_3.id}") do
+      have_button?("Enable?")
+    end
   end
 
-  xit "when the button is clicked, the user is redirected back to the admin merchants index
+  it "when the button is clicked, the user is redirected back to the admin merchants index
     page and the merchant's status has changed" do
       visit "/admin/merchants"
 
+      expect(@merchant_1.status).to eq("enabled")
 
+      within("#enab_merchant-#{@merchant_1.id}") do
+        click_button "Disable?"
+        expect(current_path).to eq("/admin/merchants")
+      end
 
-      
+      within("#admin-enabled_merchants") do
+        expect(page).to have_no_content(@merchant_1.name)
+      end
+
+      within("#admin-disabled_merchants") do
+        expect(page).to have_content(@merchant_1.name)
+      end
+    
+      expect(@merchant_1.status).to eq(0)
+
     end
-
 end 
