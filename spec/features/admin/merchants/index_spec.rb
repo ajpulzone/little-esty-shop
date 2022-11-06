@@ -133,7 +133,7 @@ RSpec.describe "Admin Merchants Index Page", type: :feature do
         expect(page).to have_content(@merchant_1.name)
       end
     
-      expect(@merchant_1.status).to eq(0)
+      expect(@merchant_1.status).to eq("enabled")
 
     end
 end 
