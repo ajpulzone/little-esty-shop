@@ -134,6 +134,18 @@ RSpec.describe "Admin Merchants Index Page", type: :feature do
       end
     
       expect(@merchant_1.status).to eq("enabled")
-
     end
-end 
+
+  it "the name of each merchant is a link, and when that link is clicked the used it taken
+    to the specified merchants admin show page" do
+      visit "/admin/merchants"
+      
+      within("#enab_merchant-#{@merchant_1.id}") do
+        expect(page).to have_link("#{@merchant_1.name}")
+        click_link "#{@merchant_1.name}"
+      end 
+      
+      expect(current_path).to eq(admin_merchant_path(@merchant_1.id))
+      expect(page).to have_content(@merchant_1.name)
+  end
+end
