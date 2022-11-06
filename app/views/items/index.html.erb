@@ -35,7 +35,7 @@
   </div>
   <div class="col border border-1">
     right column
-    <% Merchant.top_five.each do |merchant| %>
+    <% @top_five.each do |merchant| %>
       <ul>
         <li><%= "#{merchant.item} total revenue #{merchant.revenue}" %></li>
       </ul>
