@@ -88,4 +88,11 @@ RSpec.describe "Admin Invoices Show Page", type: :feature do
     expect(page).to have_content("Total Revenue: $4,311.00")
     expect(page).to have_no_content("Total Revenue: $10,000,045.00")
   end
+
+  it "should have all of the items on the invoice including the item name, quantity of item
+    ordered, the price the item sold for and the invoice_item status" do
+      visit "admin/invoices/#{@invoice_1.id}"
+
+      expect(page).to have_table("invoice_items_table")
+    end
 end

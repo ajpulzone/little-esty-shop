@@ -17,4 +17,9 @@ class Invoice < ApplicationRecord
   def total_revenue
     items.sum("unit_price")
   end
+
+  def invoice_items
+    binding.pry
+    
+  end
 end
