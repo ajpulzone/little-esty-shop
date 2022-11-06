@@ -131,8 +131,8 @@ RSpec.describe "Admin Dashboard Index Page", type: :feature do
   end
 
   it "each invoice id links to that admin invoice's show page" do
-
       visit "/admin/dashboard"
+      
       within("#dashboard-incomplete_invoices") do
         expect(page).to have_link("#{@invoice_1.id}")
       end 
