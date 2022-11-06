@@ -8,6 +8,10 @@ RSpec.describe Invoice, type: :model do
     it { should have_many(:items).through(:invoice_items) }
   end
 
+  describe 'enums' do
+    it { should define_enum_for(:status) }
+  end
+
   before :each do
     @merchant1 = Merchant.create!(name: "Billy's Baby Book Barn")
     @merchant2 = Merchant.create!(name: "Candy's Child Compendium Collection")
@@ -34,6 +38,7 @@ RSpec.describe Invoice, type: :model do
       end
     end
 
+    #AJP made this method below. Can delete if Gabe has also not done it
     xdescribe '#invoice_revenue' do
       it 'returns the total revenue for items sold on this invoice' do
         expect(@invoice1.invoice_revenue(@invoice1.id)).to eq(5400)
