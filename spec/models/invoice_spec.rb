@@ -8,6 +8,10 @@ RSpec.describe Invoice, type: :model do
     it { should have_many(:items).through(:invoice_items) }
   end
 
+  describe 'enums' do
+    it { should define_enum_for(:status) }
+  end
+
   before :each do
     @merchant1 = Merchant.create!(name: "Billy's Baby Book Barn")
     @merchant2 = Merchant.create!(name: "Candy's Child Compendium Collection")
