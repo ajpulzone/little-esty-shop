@@ -32,7 +32,7 @@ RSpec.describe 'the merchant invoices show page' do
 
   it 'display name/quantity/price/status for all invoice items' do
     visit "/merchants/#{@merchant1.id}/invoices/#{@invoice1.id}"
-    save_and_open_page
+
     within "#invoice_item_#{@invoiceitem1.id}" do
       expect(page).to have_content(@item1.name)
       expect(page).to have_content(@invoiceitem1.quantity)
@@ -65,13 +65,15 @@ RSpec.describe 'the merchant invoices show page' do
   # And I see that my Item's status has now been updated
   it 'displays the invoice item status as a select field' do
     visit "/merchants/#{@merchant1.id}/invoices/#{@invoice1.id}"
-
+    save_and_open_page
     within "#invoice_item_#{@invoiceitem1.id}" do
-      expect(page).to have_selector(:status, text: @invoiceitem1.status)
+      expect(page).to have_selector('#invoice_item_status')
+      expect(page).to have_button('Update Item Status')
     end
 
     within "#invoice_item_#{@invoiceitem2.id}" do
-      expect(page).to have_selector(:status, text: @invoiceitem2.status)
+      expect(page).to have_selector('#invoice_item_status')
+      expect(page).to have_button('Update Item Status')
     end
   end
 end
