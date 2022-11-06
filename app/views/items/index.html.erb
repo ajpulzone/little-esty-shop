@@ -35,5 +35,10 @@
   </div>
   <div class="col border border-1">
     right column
+    <% @top_five.each do |merchant| %>
+      <ul>
+        <li><%= "#{merchant.item} total revenue #{merchant.revenue}" %></li>
+      </ul>
+    <% end %>
   </div>
 </div>
