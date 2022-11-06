@@ -7,6 +7,11 @@ RSpec.describe Merchant do
     it { should have_many(:invoices).through(:invoice_items) }
   end
 
+  describe 'validations' do
+    it { should validate_presence_of :name}
+    it { should define_enum_for(:status). with_values(disabled: 0, enabled: 1) }
+  end
+
   before :each do
     @merchant1 = Merchant.create!(name: "Billy's Baby Book Barn")
     @merchant2 = Merchant.create!(name: "Candy's Child Compendium Collection")
@@ -45,6 +50,7 @@ RSpec.describe Merchant do
       it 'returns the total revenue for items sold on this invoice' do
         expect(@merchant1.invoice_revenue(@invoice1.id)).to eq(5400)
       end
+    end 
     
     describe '#invoices_not_shipped' do
       it "returns a list of items for invoices that are either 'packaged' or 'pending'" do
@@ -53,5 +59,4 @@ RSpec.describe Merchant do
       end
     end
   end
-
 end

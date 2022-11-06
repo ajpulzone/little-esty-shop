@@ -27,7 +27,5 @@
 /config/master.key
 .DS_Store
 
-echo coverage >> .gitignore
-
 /coverage/
 Gemfile.lock
