@@ -1,9 +1,8 @@
 require "rails_helper"
 
-RSpec.describe "Admin Merchants Index Page", type: :feature do
-  
-  before(:each) do
+RSpec.describe "Admin Invoices Show Page", type: :feature do
 
+  before(:each) do
     @merchant_1 = Merchant.create!(name: "Target", status: 1)
     @merchant_2 = Merchant.create!(name: "Amazon", status: 1)
     @merchant_3 = Merchant.create!(name: "Fred Meyer", status: 0)
@@ -73,79 +72,34 @@ RSpec.describe "Admin Merchants Index Page", type: :feature do
     @transaction_20 = @invoice_20.transactions.create!(credit_card_number: 4886443388914010, result: "success")
   end
 
-  it "has the names of each merchant in the system" do
-    visit "/admin/merchants"
+  it "the show page has the information related to the specified invoice, including invoice id, invoice status,
+    invoice created_at date in the format 'Monday, July 18, 2019', customer first and last name" do
+      visit "admin/invoices/#{@invoice_1.id}"
+      expect(page).to have_content("Invoice #: #{@invoice_1.id}")
+      expect(page).to have_content("Status: #{@invoice_1.status}")
+      expect(page).to have_content("Created on: #{@invoice_1.formatted_date}")
+      expect(page).to have_content("Customer: #{@invoice_1.customer.first_name} #{@invoice_1.customer.last_name}")
 
-    expect(page).to have_content(@merchant_1.name)
-    expect(page).to have_content(@merchant_2.name)
-    expect(page).to have_content(@merchant_3.name)
+      expect(page).to have_no_content("Invoice #: #{@invoice_2.id}")
+  end 
+
+  it "should list the total revenue that will be generated from the specified invoice" do
+    visit "admin/invoices/#{@invoice_1.id}"
+    expect(page).to have_content("Total Revenue: $4,311.00")
+    expect(page).to have_no_content("Total Revenue: $10,000,045.00")
   end
 
-  it "there are 2 sections: one for 'Enabled Merchants' and one for 'Disabled Merchants'
-    and each merchant is listed in the appropriate section" do
-      visit "/admin/merchants"
+  it "should have all of the items on the invoice including the item name, quantity of item
+    ordered, the price the item sold for and the invoice_item status" do
+      visit "admin/invoices/#{@invoice_1.id}"
 
-      within("#admin-enabled_merchants") do
-        expect(page).to have_content(@merchant_1.name)
-        expect(page).to have_content(@merchant_2.name)
-        expect(page).to have_no_content(@merchant_3.name)
-      end
+      has_table?("table")
 
-      within("#admin-disabled_merchants") do
-        expect(page).to have_content(@merchant_3.name)
-        expect(page).to have_no_content(@merchant_1.name)
-        expect(page).to have_no_content(@merchant_2.name)
+      within("#invoice-#{@item_1.id}") do
+        expect(page).to have_content("Candy Dispenser")
+        expect(page).to have_content("#{@item_1.name}")
+        expect(page).to have_content("#{@item_1.name}")
+        expect(page).to have_content("#{@item_1.name}")
       end
     end
-
-  it "next to each merchants name there is a button to disable/enable that merchant" do
-    visit "/admin/merchants"
-
-    within("#enab_merchant-#{@merchant_1.id}") do
-      have_button?("Disable?")
-    end
-
-    within("#enab_merchant-#{@merchant_2.id}") do
-      have_button?("Disable?")
-    end
-
-    within("#disab_merchant-#{@merchant_3.id}") do
-      have_button?("Enable?")
-    end
-  end
-
-  it "when the button is clicked, the user is redirected back to the admin merchants index
-    page and the merchant's status has changed" do
-      visit "/admin/merchants"
-
-      expect(@merchant_1.status).to eq("enabled")
-
-      within("#enab_merchant-#{@merchant_1.id}") do
-        click_button "Disable?"
-        expect(current_path).to eq("/admin/merchants")
-      end
-
-      within("#admin-enabled_merchants") do
-        expect(page).to have_no_content(@merchant_1.name)
-      end
-
-      within("#admin-disabled_merchants") do
-        expect(page).to have_content(@merchant_1.name)
-      end
-    
-      expect(@merchant_1.status).to eq("enabled")
-    end
-
-  it "the name of each merchant is a link, and when that link is clicked the used it taken
-    to the specified merchants admin show page" do
-      visit "/admin/merchants"
-      
-      within("#enab_merchant-#{@merchant_1.id}") do
-        expect(page).to have_link("#{@merchant_1.name}")
-        click_link "#{@merchant_1.name}"
-      end 
-      
-      expect(current_path).to eq(admin_merchant_path(@merchant_1.id))
-      expect(page).to have_content(@merchant_1.name)
-  end
 end
