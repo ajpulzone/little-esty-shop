@@ -1,8 +1,8 @@
 class Merchant < ApplicationRecord
   has_many :items
   has_many :invoice_items, through: :items
-  has_many :invoices, through: :items
   has_many :invoices, through: :invoice_items
+  has_many :customers, through: :invoices
 
   validates_presence_of :name
 
