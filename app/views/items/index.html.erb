@@ -34,11 +34,12 @@
     </table>
   </div>
   <div class="col border border-1">
-    right column
-    <% @top_five.each do |merchant| %>
-      <ul>
-        <li><%= "#{merchant.item} total revenue #{merchant.revenue}" %></li>
-      </ul>
+  <h3>Top 5 Items</h3>
+    <% @merchant.five_most_popular_items_by_revenue.each do |item| %>
+      <div class="p-4">
+        <h4><%= "#{item.item_name} total revenue $#{sprintf("%.2f", item.total_revenue.to_f / 100)}" %></h4>
+          <%= "Best day for #{item.item_name}: #{@merchant.best_day(item.item_id).first.created_at} " %>
+      </div>
     <% end %>
   </div>
 </div>
