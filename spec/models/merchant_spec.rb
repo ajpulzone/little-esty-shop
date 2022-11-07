@@ -60,6 +60,7 @@ RSpec.describe Merchant do
     @invoice_item_4 = InvoiceItem.create!(item_id: @item_4.id, invoice_id: @invoice_2.id, quantity: 44567, unit_price: 45, status: 1)
     @invoice_item_5 = InvoiceItem.create!(item_id: @item_5.id, invoice_id: @invoice_2.id, quantity: 1, unit_price: 10000000, status: 2)
     @invoice_item_6 = InvoiceItem.create!(item_id: @item_6.id, invoice_id: @invoice_3.id, quantity: 738, unit_price: 90999, status: 2)
+    @invoice_item_7 = InvoiceItem.create!(item_id: @item_6.id, invoice_id: @invoice_6.id, quantity: 738, unit_price: 90999, status: 2)
 
     @transaction_1 = @invoice_1.transactions.create!(credit_card_number: 4654405418249632, result: "success")
     @transaction_2 = @invoice_2.transactions.create!(credit_card_number: 4580251236515201, result: "success")
@@ -105,6 +106,12 @@ RSpec.describe Merchant do
     describe '#invoices_not_shipped' do
       it "returns a list of items for invoices that are either 'packaged' or 'pending'" do
         expect(@merchant_2.invoices_not_shipped).to eq([@invoice_item_4])
+      end
+    end
+
+    describe '#top_five_merchants' do
+      it 'returns the top five merchants by total revenue in descending order' do
+        expect(Merchant.top_five_merchants).to match([@merchant_3, @merchant_2, @merchant_1])
       end
     end
   end
