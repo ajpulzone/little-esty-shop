@@ -38,6 +38,12 @@ RSpec.describe Invoice, type: :model do
       end
     end
 
+    describe '#numerical_date' do
+      it "displays the date as 'Weekday, Month Day, Year'" do
+        expect(@invoice1.numerical_date).to eq(@invoice1.created_at.strftime('%-m/%e/%y'))
+      end
+    end
+
     #AJP made this method below. Can delete if Gabe has also not done it
     xdescribe '#invoice_revenue' do
       it 'returns the total revenue for items sold on this invoice' do
