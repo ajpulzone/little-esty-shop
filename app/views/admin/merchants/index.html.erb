@@ -21,3 +21,12 @@
 <% end %>
 <% end %>
 </ul>
+
+<p>Top Five Merchants:</p>
+<ul id="top_five_merchants">
+  <% @merchants.top_five_merchants.each do |merchant| %>
+  <div id="top_five_merchant_<%= merchant.id %>">
+    <li><%= link_to "#{merchant.name}", admin_merchant_path(merchant.id) %> - <%= number_to_currency(merchant.total_revenue / 100.00) %> in sales</li>
+  <% end %>
+</ul>
+

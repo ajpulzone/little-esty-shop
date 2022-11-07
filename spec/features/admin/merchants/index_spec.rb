@@ -50,6 +50,7 @@ RSpec.describe "Admin Merchants Index Page", type: :feature do
     @invoice_item_4 = InvoiceItem.create!(item_id: @item_4.id, invoice_id: @invoice_2.id, quantity: 44567, unit_price: 45, status: 1)
     @invoice_item_5 = InvoiceItem.create!(item_id: @item_5.id, invoice_id: @invoice_2.id, quantity: 1, unit_price: 10000000, status: 2)
     @invoice_item_6 = InvoiceItem.create!(item_id: @item_6.id, invoice_id: @invoice_3.id, quantity: 738, unit_price: 90999, status: 2)
+    @invoice_item_7 = InvoiceItem.create!(item_id: @item_6.id, invoice_id: @invoice_6.id, quantity: 738, unit_price: 90999, status: 2)
 
     @transaction_1 = @invoice_1.transactions.create!(credit_card_number: 4654405418249632, result: "success")
     @transaction_2 = @invoice_2.transactions.create!(credit_card_number: 4580251236515201, result: "success")
@@ -147,5 +148,41 @@ RSpec.describe "Admin Merchants Index Page", type: :feature do
       
       expect(current_path).to eq(admin_merchant_path(@merchant_1.id))
       expect(page).to have_content(@merchant_1.name)
+  end
+  # As an admin,
+  # When I visit the admin merchants index
+  # Then I see the names of the top 5 merchants by total revenue generated
+  # And I see that each merchant name links to the admin merchant show page for that merchant
+  # And I see the total revenue generated next to each merchant name
+
+  # Notes on Revenue Calculation:
+  # - Only invoices with at least one successful transaction should count towards revenue
+  # - Revenue for an invoice should be calculated as the sum of the revenue of all invoice items
+  # - Revenue for an invoice item should be calculated as the invoice item unit price multiplied by the quantity
+  it 'displays the top five merchants by total revenue' do
+    visit "/admin/merchants"
+
+    within '#top_five_merchants' do
+      expect("#{@merchant_3.name}").to appear_before("#{@merchant_2.name}")
+      expect("#{@merchant_2.name}").to appear_before("#{@merchant_1.name}")
+    end
+  end
+
+  it "has a link to each top five merchant's show page" do
+    visit "/admin/merchants"
+
+    within "#top_five_merchant_#{@merchant_3.id}" do
+      expect(page).to have_link("#{@merchant_3.name}")
+      click_link("#{@merchant_3.name}")
+      expect(current_path).to eq(admin_merchant_path(@merchant_3.id))
+    end
+  end
+
+  it 'displays the total revenue next to each merchant name' do
+    visit "/admin/merchants"
+
+    within "#top_five_merchant_#{@merchant_3.id}" do
+      expect(page).to have_content("$671,572.62 in sales")
+    end
   end
 end
