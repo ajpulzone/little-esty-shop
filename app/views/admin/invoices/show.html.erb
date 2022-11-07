@@ -4,7 +4,7 @@
 <p>Customer: <%= @invoice.customer.first_name %> <%= @invoice.customer.last_name %></p>
 <p>Total Revenue: <%= number_to_currency(@invoice.total_revenue) %></p>
 
-<table class="invoice_items_table">
+<table class="table">
   <thead>
     <tr>
       <th>Name</th>
@@ -15,12 +15,12 @@
   </thead>
 
     <tbody>
-      <% @invoice_items.each do |item| %>
-        <tr id="invoice-<%= item.id %>">
-          <td><%= item.name %></td>
-          <td><%= item.quantity %></td>
-          <td><%= number_to_currency(item.unit_price) %></td>
-          <td><%= item.status %></td>
+      <% @invoice.invoice_items.each do |invoice_item| %>
+        <tr id="invoice-<%= invoice_item.item.id %>">
+          <td><%= invoice_item.item.name %></td>
+          <td><%= invoice_item.quantity %></td>
+          <td><%= number_to_currency(invoice_item.item.unit_price) %></td>
+          <td><%= invoice_item.item.status %></td>
         </tr>
       <% end %>
 </table>

@@ -93,6 +93,13 @@ RSpec.describe "Admin Invoices Show Page", type: :feature do
     ordered, the price the item sold for and the invoice_item status" do
       visit "admin/invoices/#{@invoice_1.id}"
 
-      expect(page).to have_table("invoice_items_table")
+      has_table?("table")
+
+      within("#invoice-#{@item_1.id}") do
+        expect(page).to have_content("Candy Dispenser")
+        expect(page).to have_content("#{@item_1.name}")
+        expect(page).to have_content("#{@item_1.name}")
+        expect(page).to have_content("#{@item_1.name}")
+      end
     end
 end
