@@ -157,8 +157,8 @@ RSpec.describe "Admin Dashboard (Index Page)", type: :feature do
       end 
 
       within("#dashboard-incomplete_invoices") do
-        expect(@invoice_2.formatted_date).to eq(@invoice_2.created_at.strftime('%A, %B%e, %Y'))
-        expect(@invoice_1.formatted_date).to eq(@invoice_1.created_at.strftime('%A, %B%e, %Y'))
+        expect(@invoice_2.formatted_date).to eq(@invoice_2.created_at.strftime('%A, %B %e, %Y'))
+        expect(@invoice_1.formatted_date).to eq(@invoice_1.created_at.strftime('%A, %B %e, %Y'))
       end 
   end
 end

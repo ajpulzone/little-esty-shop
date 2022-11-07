@@ -5,7 +5,7 @@ class Invoice < ApplicationRecord
   has_many :transactions 
 
   def formatted_date
-    created_at.strftime('%A, %B%e, %Y')
+    created_at.strftime('%A, %B %e, %Y')
   end
   
   def self.incomplete_invoices

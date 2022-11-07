@@ -24,7 +24,7 @@ RSpec.describe Invoice, type: :model do
   describe 'model methods' do
     describe '#formatted_date' do
       it "displays the date as 'Weekday, Month Day, Year'" do
-        expect(@invoice1.formatted_date).to eq(@invoice1.created_at.strftime('%A, %B%e, %Y'))
+        expect(@invoice1.formatted_date).to eq(@invoice1.created_at.strftime('%A, %B %e, %Y'))
       end
     end
 
