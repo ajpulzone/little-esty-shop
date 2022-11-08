@@ -7,6 +7,8 @@ Rails.application.routes.draw do
 
   get 'merchants/:id/dashboard', to: 'merchants#show'
 
+  get '/api/index', to: 'api#index'
+
   resources :merchants do
     resources :invoices, only: %i[index show]
     resources :items, only: %i[index show new create edit update]
