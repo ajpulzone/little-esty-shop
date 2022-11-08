@@ -149,16 +149,7 @@ RSpec.describe "Admin Merchants Index Page", type: :feature do
       expect(current_path).to eq(admin_merchant_path(@merchant_1.id))
       expect(page).to have_content(@merchant_1.name)
   end
-  # As an admin,
-  # When I visit the admin merchants index
-  # Then I see the names of the top 5 merchants by total revenue generated
-  # And I see that each merchant name links to the admin merchant show page for that merchant
-  # And I see the total revenue generated next to each merchant name
 
-  # Notes on Revenue Calculation:
-  # - Only invoices with at least one successful transaction should count towards revenue
-  # - Revenue for an invoice should be calculated as the sum of the revenue of all invoice items
-  # - Revenue for an invoice item should be calculated as the invoice item unit price multiplied by the quantity
   it 'displays the top five merchants by total revenue' do
     visit "/admin/merchants"
 
@@ -184,5 +175,16 @@ RSpec.describe "Admin Merchants Index Page", type: :feature do
     within "#top_five_merchant_#{@merchant_3.id}" do
       expect(page).to have_content("$671,572.62 in sales")
     end
+  end
+
+  # When I visit the admin merchants index
+  # Then next to each of the 5 merchants by revenue I see the date with the most revenue for each merchant.
+  # And I see a label “Top selling date for was "
+  # Note: use the invoice date.
+  # If there are multiple days with equal number of sales, return the most recent day.
+
+  it 'displays the top selling date for each top 5 merchant' do
+    visit "/admin/merchants"
+
   end
 end

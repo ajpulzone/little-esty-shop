@@ -35,4 +35,8 @@ class Merchant < ApplicationRecord
     self.joins(:transactions, items: :merchant).where(transactions: {result: :success}).select('merchants.*, sum(invoice_items.quantity * invoice_items.unit_price) as total_revenue').group('merchants.id').order(total_revenue: :desc).limit(5)
   end
 
+  def top_revenue_date
+    invoices.joins(:transactions).where(transactions: { result: :success }).group(:id).select('invoices.created_at', 'SUM(invoice_items.quantity * invoice_items.unit_price) AS revenue').order('revenue desc', 'created_at desc').first.numerical_date
+  end
+
 end
