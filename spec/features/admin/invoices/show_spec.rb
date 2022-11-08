@@ -99,7 +99,7 @@ RSpec.describe "Admin Invoices Show Page", type: :feature do
         expect(page).to have_content(@invoice_item_1.item.name)
         expect(page).to have_content(@invoice_item_1.quantity)
         expect(page).to have_content("$4,291.00")
-        expect(page).to have_content(@invoice_item_1.item.status)
+        expect(page).to have_content(@invoice_item_1.status)
       end
 
       expect(page).to have_no_content(@invoice_item_6.item.name)
@@ -135,32 +135,5 @@ RSpec.describe "Admin Invoices Show Page", type: :feature do
         expect(@current_invoice.id).to eq(@invoice_1.id)
         expect(@current_invoice.status).to eq("in progress")
       end
-    end
+  end
 end 
-
-
-
-    # expect(page).to have_content("#{@invoice_1.status}")
-    # expect(@invoice_1.status).to eq("completed")
-    # # expect(page).to have_field(:status)
-    # # assert_selector(@invoice_4.status)
-    
-    # expect(page).to have_button("Update Invoice Status")
-
-    # # save_and_open_page
-    # # select "cancelled", from: :status
-
-    # have_select :status,
-    # selected: "cancelled",
-    # options: ["completed", "cancelled", "in_progress"]
-
-    # # # find("#state_search", visible: false).find("option[value='Pennsylvania']").click
-    # # find(:status, visible: false).find("option[value='cancelled']").click
-    # click_button "Update Invoice Status"
-
-    # expect(current_path).to eq(admin_invoice_path(@invoice_1.id))
-    # expect(@invoice_1.status).to eq("cancelled")
-
-    # <%= button_to 'Disable?', admin_merchant_path(merchant.id), form: {style: "display:inline-block;"}, method: :patch, params: { status: 'disabled' } %>
-#   end
-# end

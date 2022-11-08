@@ -2,7 +2,7 @@
 
 <h1>Admin Merchants</h1>
 
-<p>Enabled Merchants: </p>
+<h3>Enabled Merchants: </h3>
   <ul id="admin-enabled_merchants">
     <% @merchants.each do |merchant| %>
       <% if merchant.enabled? %>
@@ -13,7 +13,7 @@
     <% end %>
   </ul>
 
-<p>Disabled Merchants: </p>
+<h3>Disabled Merchants: </h3>
   <ul id="admin-disabled_merchants">
     <% @merchants.each do |merchant| %>
       <% if merchant.disabled? %>
