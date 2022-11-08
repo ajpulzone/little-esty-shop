@@ -5,6 +5,8 @@ RSpec.describe Merchant do
     it { should have_many :items }
     it { should have_many(:invoice_items).through(:items)}
     it { should have_many(:invoices).through(:invoice_items) }
+    it { should have_many(:customers).through(:invoices)}
+    it { should have_many(:transactions).through(:invoices)}
   end
 
   describe 'validations' do
@@ -55,7 +57,54 @@ RSpec.describe Merchant do
     describe '#invoices_not_shipped' do
       it "returns a list of items for invoices that are either 'packaged' or 'pending'" do
         expect(@merchant2.invoices_not_shipped).to eq([@invoiceitem4, @invoiceitem5])
-        # expect(@merchant2.invoices_not_shipped).to eq([@invoiceitem4.item, @invoiceitem5.item])
+      end
+    end
+    
+    describe '#merchant_top_5_customers' do
+      it "returns the top 5 customers for the merchant" do
+        merchant = create(:merchant)
+        merchant2 = create(:merchant)
+        item_1 = create(:item, merchant: merchant)
+        item_2 = create(:item, merchant: merchant)
+        item_3 = create(:item, merchant: merchant)
+        item_4 = create(:item, merchant: merchant2)
+        
+        customer1 = create(:customer)
+        customer2 = create(:customer)
+        customer3 = create(:customer)
+        customer4 = create(:customer)
+        customer5 = create(:customer, first_name: 'The Trouble Maker')
+        customer6 = create(:customer)
+        customer7 = create(:customer)
+        
+        customer1_invoice = create(:invoice, customer: customer1)
+        customer2_invoice = create(:invoice, customer: customer2)
+        customer3_invoice = create(:invoice, customer: customer3)
+        customer4_invoice = create(:invoice, customer: customer4)
+        customer5_invoice = create(:invoice, customer: customer5)
+        customer5_invoice2 = create(:invoice, customer: customer5)
+        customer6_invoice = create(:invoice, customer: customer6)
+        customer7_invoice = create(:invoice, customer: customer7)
+        
+        customer1_transactions = create_list(:transaction, 2, invoice: customer1_invoice, result: 'failed')
+        customer2_transactions = create_list(:transaction, 4, invoice: customer2_invoice, result: 'success')
+        customer3_transactions = create_list(:transaction, 3, invoice: customer3_invoice, result: 'success')
+        customer4_transactions = create_list(:transaction, 2, invoice: customer4_invoice, result: 'success')
+        customer5_transactions = create_list(:transaction, 6, invoice: customer5_invoice, result: 'success')
+        customer5_transactions2 = create_list(:transaction, 6, invoice: customer5_invoice2, result: 'success')
+        customer6_transactions = create_list(:transaction, 5, invoice: customer6_invoice, result: 'success')
+        customer7_transactions = create_list(:transaction, 7, invoice: customer7_invoice, result: 'success')
+        
+        customer1_invoice_item = create(:invoice_item, invoice: customer1_invoice, item: item_1, status: 0)
+        customer2_invoice_item = create(:invoice_item, invoice: customer2_invoice, item: item_2, status: 1)
+        customer3_invoice_item = create(:invoice_item, invoice: customer3_invoice, item: item_3, status: 2)
+        customer4_invoice_item = create(:invoice_item, invoice: customer4_invoice, item: item_1, status: 0)
+        customer5_invoice_item = create(:invoice_item, invoice: customer5_invoice, item: item_2, status: 1)
+        customer5_invoice_item2 = create(:invoice_item, invoice: customer5_invoice2, item: item_4, status: 1)
+        customer6_invoice_item = create(:invoice_item, invoice: customer6_invoice, item: item_3, status: 2)
+        customer7_invoice_item = create(:invoice_item, invoice: customer7_invoice, item: item_3, status: 2)
+        
+        expect(merchant.merchant_top_5_customers).to eq([customer7, customer5, customer6, customer2, customer3])
       end
     end
 
