@@ -10,13 +10,11 @@ class Merchant < ApplicationRecord
   end
   
   def invoices_not_shipped
-    invoice_items.where(status: ['0', '1'])
+    invoice_items.select('invoice_items.*').joins(:item).joins(:invoice).where(status: ['0', '1']).order('invoices.created_at')
   end
   
   def merchant_top_5_customers
-    # merch = Merchant.where(id: self.id)
-    customers = Customer.select(:id, :first_name, :last_name, 'count(transactions.*) as number_transactions').joins(:transactions).joins(:merchants).where(['merchants.id = ? and transactions.result = ?', self.id, 'success']).group(:id).order('number_transactions desc').limit(5)
-    # require "pry"; binding.pry
+    Customer.select(:id, :first_name, :last_name, 'count(transactions.*) as number_transactions').joins(invoices: [:items, :transactions]).where(['items.merchant_id = ? and transactions.result = ?', self.id, 'success']).group(:id).order('number_transactions desc').limit(5)
   end
 
 end

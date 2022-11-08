@@ -73,7 +73,7 @@ RSpec.describe 'Merchant Dashboard' do
       
     end
     
-    xit "I see the names of the top 5 customers who have conducted the largest
+    it "I see the names of the top 5 customers who have conducted the largest
     number of successful transactions with my merchant And next to each
     customer name I see the number of successful transactions they have
     conducted with my merchant" do
@@ -122,7 +122,11 @@ RSpec.describe 'Merchant Dashboard' do
       visit "/merchants/#{merchant.id}/dashboard"
       
       within("#favorite_customers") do
-        expect(page).to have_content("#{customer7.first_name} #{customer7.last_name} Completed Transactions: #{customer7_transactions.count}")
+        expect(page).to have_content("#{customer7.first_name} #{customer7.last_name} --- Completed Transactions: #{customer7_transactions.count}")
+        expect(page).to have_content("#{customer6.first_name} #{customer6.last_name} --- Completed Transactions: #{customer6_transactions.count}")
+        expect(page).to have_content("#{customer5.first_name} #{customer5.last_name} --- Completed Transactions: #{customer5_transactions.count}")
+        expect(page).to have_content("#{customer3.first_name} #{customer3.last_name} --- Completed Transactions: #{customer3_transactions.count}")
+        expect(page).to have_content("#{customer2.first_name} #{customer2.last_name} --- Completed Transactions: #{customer2_transactions.count}")
         expect(page).to_not have_content("#{customer1.first_name} #{customer1.last_name}")
         expect(page).to_not have_content("#{customer4.first_name} #{customer4.last_name}")
       end
