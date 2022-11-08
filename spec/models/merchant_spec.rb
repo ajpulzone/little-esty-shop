@@ -33,7 +33,7 @@ RSpec.describe Merchant do
     @invoiceitem6 = InvoiceItem.create!(item: @item3, invoice: @invoice3, quantity: 1, unit_price: @item3.unit_price, status: 2 )
   end
 
-  describe 'model methods' do
+  describe 'instance methods' do
     describe '#unique_invoices' do
       it 'returns a unique list of invoices for a merchant' do
         expect(@merchant1.unique_invoices).to match([@invoice1, @invoice2])
@@ -50,13 +50,22 @@ RSpec.describe Merchant do
       it 'returns the total revenue for items sold on this invoice' do
         expect(@merchant1.invoice_revenue(@invoice1.id)).to eq(5400)
       end
-    end 
-    
+    end
+
     describe '#invoices_not_shipped' do
       it "returns a list of items for invoices that are either 'packaged' or 'pending'" do
         expect(@merchant2.invoices_not_shipped).to eq([@invoiceitem4, @invoiceitem5])
         # expect(@merchant2.invoices_not_shipped).to eq([@invoiceitem4.item, @invoiceitem5.item])
       end
     end
+
+    describe '#five_most_popular_items_by_revenue' do
+      it 'returns the 5 most popular items by revenue' do
+        
+      end
+
+    end
+
+
   end
 end
