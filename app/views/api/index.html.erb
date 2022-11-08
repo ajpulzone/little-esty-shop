@@ -1,0 +1,26 @@
+<div class="row mb-3">
+  <div class="col bg-warning">
+    <h1>HERES THE API CALL</h1>
+    <h1><%= link_to @data['url'], "#{@data['url']}" %></h1>
+    <h2><%= link_to @data['repos_url'], "#{@data['repos_url']}" %></h2>
+    <h1><%= link_to @project_repo['name'] %></h1>
+    <%= @project_repo %>
+    <table class='table'>
+      <tr>
+        <th>api json response key</th>
+        <th>api json response value</th>
+      </tr>
+      <% @data.each do |k,v| %>
+      <tr>
+        <td><%= k %></td>
+        <td><%= link_to v, "#{v}" %></td>
+      </tr>
+      <% end %>
+    </table>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+
+  </div>
+</div>
