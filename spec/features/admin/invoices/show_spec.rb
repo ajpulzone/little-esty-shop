@@ -1,12 +1,11 @@
 require "rails_helper"
 
-RSpec.describe "Admin Dashboard (Index Page)", type: :feature do
-  
-  before(:each) do
+RSpec.describe "Admin Invoices Show Page", type: :feature do
 
-    @merchant_1 = Merchant.create!(name: "Target")
-    @merchant_2 = Merchant.create!(name: "Amazon")
-    @merchant_3 = Merchant.create!(name: "Fred Meyer")
+  before(:each) do
+    @merchant_1 = Merchant.create!(name: "Target", status: 1)
+    @merchant_2 = Merchant.create!(name: "Amazon", status: 1)
+    @merchant_3 = Merchant.create!(name: "Fred Meyer", status: 0)
 
     @customer_1 = Customer.create!(first_name: "Luke", last_name: "Harison")
     @customer_2 = Customer.create!(first_name: "Angela", last_name: "Leizer")
@@ -73,92 +72,35 @@ RSpec.describe "Admin Dashboard (Index Page)", type: :feature do
     @transaction_20 = @invoice_20.transactions.create!(credit_card_number: 4886443388914010, result: "success")
   end
 
-  it "has a header indicating that the user is on the admin dashboard" do
-    visit "/admin/dashboard"
-    expect(page).to have_content("Admin Dashboard")
+  it "the show page has the information related to the specified invoice, including invoice id, invoice status,
+    invoice created_at date in the format 'Monday, July 18, 2019', customer first and last name" do
+      visit "admin/invoices/#{@invoice_1.id}"
+      
+      expect(page).to have_content("Invoice #: #{@invoice_1.id}")
+      expect(page).to have_content("Status: #{@invoice_1.status}")
+      expect(page).to have_content("Created on: #{@invoice_1.formatted_date}")
+      expect(page).to have_content("Customer: #{@invoice_1.customer.first_name} #{@invoice_1.customer.last_name}")
+
+      expect(page).to have_no_content("Invoice #: #{@invoice_2.id}")
+  end 
+
+  it "should list the total revenue that will be generated from the specified invoice" do
+    visit "admin/invoices/#{@invoice_1.id}"
+    expect(page).to have_content("Total Revenue: $4,311.00")
+    expect(page).to have_no_content("Total Revenue: $10,000,045.00")
   end
 
-  it "has a link to the admin merchants index" do
-    visit "/admin/dashboard"
-      expect(page).to have_link("Admin Merchants")
-      click_link "Admin Merchants"
-      expect(current_path).to eq(admin_merchants_path)
-  end
+  it "should have all of the items on the invoice including the item name, quantity of item
+    ordered, the price the item sold for and the invoice_item status" do
+      visit "admin/invoices/#{@invoice_1.id}"
 
-  it "has a link to the admin invoices index" do
-    visit "/admin/dashboard"
-      expect(page).to have_link("Admin Invoices")
-      click_link "Admin Invoices"
-      expect(current_path).to eq(admin_invoices_path)
-  end
+      has_table?("table")
 
-  it "has a list of the top 5 customers who have conducted the largest number of successful
-    transactions" do
-      visit "/admin/dashboard"
-
-      within("#dashboard-customers") do
-        expect("#{@customer_3.first_name} #{@customer_3.last_name}").to appear_before("#{@customer_1.first_name} #{@customer_1.last_name}")
-        expect("#{@customer_1.first_name} #{@customer_1.last_name}").to appear_before("#{@customer_2.first_name} #{@customer_2.last_name}")
-        expect("#{@customer_5.first_name} #{@customer_5.last_name}").to appear_before("#{@customer_7.first_name} #{@customer_7.last_name}")
-        expect("#{@customer_7.first_name} #{@customer_7.last_name}").to_not appear_before("#{@customer_5.first_name} #{@customer_5.last_name}")
-        expect("#{@customer_2.first_name} #{@customer_2.last_name}").to_not appear_before("#{@customer_1.first_name} #{@customer_1.last_name}")
-        expect("#{@customer_5.first_name} #{@customer_5.last_name}").to_not appear_before("#{@customer_2.first_name} #{@customer_2.last_name}")
-      end 
-  end
-
-  it "next to each of the top 5 customers it has the number of successful transactions they
-    have conducted" do
-      visit "/admin/dashboard"
-
-       within("#dashboard-customers") do
-        expect(page).to have_content("Name: #{@customer_1.first_name} #{@customer_1.last_name} | Successful Transactions: #{@customer_1.transaction_ct("success")}")
-        expect(page).to have_content("Name: #{@customer_2.first_name} #{@customer_2.last_name} | Successful Transactions: #{@customer_2.transaction_ct("success")}")
-        expect(page).to have_content("Name: #{@customer_3.first_name} #{@customer_3.last_name} | Successful Transactions: #{@customer_3.transaction_ct("success")}")
-        expect(page).to have_content("Name: #{@customer_5.first_name} #{@customer_5.last_name} | Successful Transactions: #{@customer_5.transaction_ct("success")}")
-        expect(page).to have_content("Name: #{@customer_7.first_name} #{@customer_7.last_name} | Successful Transactions: #{@customer_7.transaction_ct("success")}")
-      end 
-  end
-
-  it "has a section for 'Incomplete Invoices' that contains a list of the unique id's of all invoices that have items that have 
-    not yet been shipped" do
-      visit "/admin/dashboard"
-
-      within("#dashboard-incomplete_invoices") do
-        expect(page).to have_content(@invoice_1.id, count: 1)
-        expect(page).to have_content(@invoice_2.id, count: 1)
-        expect(page).to have_no_content(@invoice_3.id)
-      end 
-  end
-
-  it "each invoice id links to that admin invoice's show page" do
-
-      visit "/admin/dashboard"
-      within("#dashboard-incomplete_invoices") do
-        expect(page).to have_link("#{@invoice_1.id}")
-      end 
-      click_link "#{@invoice_1.id}"
-      expect(current_path).to eq(admin_invoice_path("#{@invoice_1.id}"))
-
-      visit "/admin/dashboard"
-      within("#dashboard-incomplete_invoices") do
-        expect(page).to have_link("#{@invoice_2.id}")
-      end 
-      click_link "#{@invoice_2.id}"
-      expect(current_path).to eq(admin_invoice_path("#{@invoice_2.id}"))
-  end
-
-  it "next to each invoice is the date created formatted like 'Monday, July 18, 2019
-    and the invoices are listed in order from oldest to newest" do
-    
-    visit "/admin/dashboard"
-
-      within("#dashboard-incomplete_invoices") do
-        expect("#{@invoice_1.id}").to appear_before("#{@invoice_2.id}")
-      end 
-
-      within("#dashboard-incomplete_invoices") do
-        expect(@invoice_2.formatted_date).to eq(@invoice_2.created_at.strftime('%A, %B %e, %Y'))
-        expect(@invoice_1.formatted_date).to eq(@invoice_1.created_at.strftime('%A, %B %e, %Y'))
-      end 
-  end
+      within("#invoice-#{@item_1.id}") do
+        expect(page).to have_content("Candy Dispenser")
+        expect(page).to have_content("#{@item_1.name}")
+        expect(page).to have_content("#{@item_1.name}")
+        expect(page).to have_content("#{@item_1.name}")
+      end
+    end
 end
