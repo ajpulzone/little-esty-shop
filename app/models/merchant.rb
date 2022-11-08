@@ -42,12 +42,10 @@ class Merchant < ApplicationRecord
 
   def best_day(item_id)
     invoices.select('invoices.created_at, items.name as item_name')
-    .joins(:invoice_items)
-    .joins(:items)
-    .where('items.id = ?', item_id)
-    .order('invoices.created_at desc')
-    .limit(1)
+            .joins(:invoice_items)
+            .joins(:items)
+            .where('items.id = ?', item_id)
+            .order('invoices.created_at desc')
+            .limit(1)
   end
 end
-
-1
