@@ -2,11 +2,25 @@
 <h5> <%= link_to "Merchant Items List", "/merchants/#{@merchant.id}/items" %> </h5>
 <h5> <%= link_to "Merchant Invoices Index", "/merchants/#{@merchant.id}/invoices" %> </h5>
 
-<div id="dashboard-items_to_ship">
-  <h3>Items Ready to Ship</h3>
-  <ul>
-    <% @merchant.invoices_not_shipped.each do |invoice_item| %>
-    <li> <%= invoice_item.item.name %> <%= link_to "#{invoice_item.invoice.id}", "/merchants/#{@merchant.id}/invoices/#{invoice_item.invoice.id}" %> </li>
-      <% end %>
-  </ul>
+<div class="row">
+  <div class="col-6 border border-1">
+    <div id="dashboard-items_to_ship">
+      <h3>Items Ready to Ship</h3>
+      <ul>
+        <% @merchant.invoices_not_shipped.each do |invoice_item| %>
+        <li> <%= invoice_item.item.name %> <%= link_to "Invoice ##{invoice_item.invoice.id}", "/merchants/#{@merchant.id}/invoices/#{invoice_item.invoice.id}" %> - <%= invoice_item.invoice.formatted_date %> </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+  <div class="col-6 border border-1">
+    <div id="favorite_customers">
+      <h3>Favorite Customers</h3>
+      <ul>
+        <% @merchant.merchant_top_5_customers.each do |customer| %>
+        <li> <%= "#{customer.first_name} #{customer.last_name} --- Completed Transactions: #{customer.number_transactions}" %> </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
 </div>
