@@ -77,7 +77,7 @@ RSpec.describe "Admin Invoices Show Page", type: :feature do
       visit "admin/invoices/#{@invoice_1.id}"
       expect(page).to have_content("Invoice #: #{@invoice_1.id}")
       expect(page).to have_content("#{@invoice_1.status}")
-      expect(page).to have_content("Created on: #{@invoice_1.formatted_date}")
+      expect(page).to have_content("Created On: #{@invoice_1.formatted_date}")
       expect(page).to have_content("Customer: #{@invoice_1.customer.first_name} #{@invoice_1.customer.last_name}")
 
       expect(page).to have_no_content("Invoice #: #{@invoice_2.id}")
@@ -108,27 +108,59 @@ RSpec.describe "Admin Invoices Show Page", type: :feature do
   it "the invoice status is a select field, and the invoice's current status is selected" do
     visit "admin/invoices/#{@invoice_1.id}"
 
-    expect(page).to have_content("#{@invoice_1.status}")
-    expect(@invoice_1.status).to eq("completed")
-    # expect(page).to have_field(:status)
-    # assert_selector(@invoice_4.status)
+    within("#invoice-#{@invoice_1.id}") do
+      expect(page).to have_field("status")
+      expect(page).to have_content("completed")
+      expect(@invoice_1.status).to eq("completed")
+      expect(page).to have_button("Update Invoice Status")
+    end
+  end 
+
+  it "when the Update Invoice Status button is clicked, the item status will be
+    updated with the status chosen and the user will be redirected back to the
+    admin invoice show page" do
+      visit "admin/invoices/#{@invoice_1.id}"
+
+      within("#invoice-#{@invoice_1.id}") do
+        expect(@invoice_1.status).to eq("completed")
+
+        page.select("in progress", from: :status)
+        click_button "Update Invoice Status"
+
+        expect(current_path).to eq(admin_invoice_path(@invoice_1.id))
+        expect(page).to have_content(@invoice_1.status)
+
+        @current_invoice = Invoice.order(:updated_at).last
+
+        expect(@current_invoice.id).to eq(@invoice_1.id)
+        expect(@current_invoice.status).to eq("in progress")
+      end
+    end
+end 
+
+
+
+    # expect(page).to have_content("#{@invoice_1.status}")
+    # expect(@invoice_1.status).to eq("completed")
+    # # expect(page).to have_field(:status)
+    # # assert_selector(@invoice_4.status)
     
-    expect(page).to have_button("Update Invoice Status")
+    # expect(page).to have_button("Update Invoice Status")
 
-    # save_and_open_page
-    # select "cancelled", from: :status
+    # # save_and_open_page
+    # # select "cancelled", from: :status
 
-    have_select :status,
-    selected: "cancelled",
-    options: ["completed", "cancelled", "in_progress"]
+    # have_select :status,
+    # selected: "cancelled",
+    # options: ["completed", "cancelled", "in_progress"]
 
-    # # find("#state_search", visible: false).find("option[value='Pennsylvania']").click
-    # find(:status, visible: false).find("option[value='cancelled']").click
-    click_button "Update Invoice Status"
+    # # # find("#state_search", visible: false).find("option[value='Pennsylvania']").click
+    # # find(:status, visible: false).find("option[value='cancelled']").click
+    # click_button "Update Invoice Status"
 
-    expect(current_path).to eq(admin_invoice_path(@invoice_1.id))
-    expect(@invoice_1.status).to eq("cancelled")
+    # expect(current_path).to eq(admin_invoice_path(@invoice_1.id))
+    # expect(@invoice_1.status).to eq("cancelled")
 
     # <%= button_to 'Disable?', admin_merchant_path(merchant.id), form: {style: "display:inline-block;"}, method: :patch, params: { status: 'disabled' } %>
-  end
-end
+#   end
+# end

@@ -4,11 +4,7 @@ class Invoice < ApplicationRecord
   has_many :items, through: :invoice_items
   has_many :transactions
 
-  enum status: {
-    completed: 0,
-    cancelled: 1, 
-    "in progress": 2
-    }
+  enum status: [ :completed, :cancelled, "in progress" ]
 
   def formatted_date
     created_at.strftime('%A, %B%e, %Y')
@@ -21,5 +17,4 @@ class Invoice < ApplicationRecord
   def total_revenue
     items.sum("unit_price")
   end
-
 end

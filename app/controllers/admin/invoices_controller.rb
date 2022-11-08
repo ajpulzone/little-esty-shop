@@ -11,11 +11,12 @@ class Admin::InvoicesController < ApplicationController
   def update
     @invoice = Invoice.find(params[:id])
     @invoice.update(invoice_params)
+    @invoice.save
     redirect_to admin_invoice_path(@invoice.id)
   end
 
   def invoice_params
-    params.require(:invoice).permit(:id, :status)
+    params.permit(:customer_id, :status)
   end
   
 end
