@@ -56,7 +56,7 @@ RSpec.describe Merchant do
     
     describe '#invoices_not_shipped' do
       it "returns a list of items for invoices that are either 'packaged' or 'pending'" do
-        expect(@merchant2.invoices_not_shipped).to eq([@invoiceitem5, @invoiceitem4])
+        expect(@merchant2.invoices_not_shipped).to eq([@invoiceitem4, @invoiceitem5])
       end
     end
     
