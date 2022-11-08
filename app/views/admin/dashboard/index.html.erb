@@ -1,19 +1,26 @@
 <%= render partial: "shared/admin_dashboard" %>
 
-<ul id="dashboard-customers">
-  <p>Top 5 Customers: </p>
-    <% @customers.top_five_customers.each do |customer| %>
-  <li>
-   Name: <%= customer.first_name %> <%= customer.last_name %> | Successful Transactions: <%= customer.transaction_ct("success") %>
-  </li>
-<% end %>
-</ul>
-
-<ul id="dashboard-incomplete_invoices">
-  <p>Incomplete Invoices: </p>
-    <% @invoices.incomplete_invoices.each do |invoice| %>
-  <li>
-   Invoice #: <%= link_to "#{invoice.id}", admin_invoice_path(invoice.id) %>, Created At: <%= invoice.formatted_date %>
-  </li>
-<% end %>
-</ul>
+<div class="container">
+  <div class="row align-items-start">
+    <div class="col">
+      <ul id="dashboard-customers">
+        <h2>Top 5 Customers: </h2>
+          <% @customers.top_five_customers.each do |customer| %>
+        <li>
+        Name: <%= customer.first_name %> <%= customer.last_name %> | Successful Transactions: <%= customer.transaction_ct("success") %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+    <div class="col">
+      <ul id="dashboard-incomplete_invoices">
+        <h2>Incomplete Invoices: </h2>
+          <% @invoices.incomplete_invoices.each do |invoice| %>
+        <li>
+        Invoice #: <%= link_to "#{invoice.id}", admin_invoice_path(invoice.id) %>, Created On: <%= invoice.formatted_date %>
+        </li>
+      <% end %>
+      </ul>
+    </div>
+  </div>
+</div>
