@@ -1,0 +1,28 @@
+<%= render partial: 'shared/navbar', locals: { merchant_name: 'Welcome' } %>
+<div class="row">
+  <div class="col">
+    <h1><%= @repo_name.name %></h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <h1>Pull Requests Total:</h1>
+    <h2><%= @pull_requests.number %></h2>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <table class="table">
+      <tr>
+        <th>name</th>
+        <th>contributions</th>
+      </tr>
+      <% @contributors.each do |person| %>
+        <tr>
+          <td><%= person.name %></td>
+          <td><%= person.contributions %></td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+</div>
