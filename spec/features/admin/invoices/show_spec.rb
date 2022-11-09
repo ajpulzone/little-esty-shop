@@ -36,12 +36,12 @@ RSpec.describe "Admin Invoices Show Page", type: :feature do
     @invoice_19 = @customer_6.invoices.create!(status: 2)
     @invoice_20 = @customer_7.invoices.create!(status: 0)
     
-    @item_1 = Item.create!(merchant_id: @merchant_1.id, name: "Candy Dispenser", description: "Dispenses Candy", unit_price: 4291)
-    @item_2 = Item.create!(merchant_id: @merchant_1.id, name: "Towel", description: "100% Cotton", unit_price: 15)
-    @item_3 = Item.create!(merchant_id: @merchant_2.id, name: "Bowl", description: "Ceramic, Blue", unit_price: 5)
-    @item_4 = Item.create!(merchant_id: @merchant_2.id, name: "Napkin Holder", description: "Shaped Like A Taco", unit_price: 45)
-    @item_5 = Item.create!(merchant_id: @merchant_2.id, name: "Rocket Ship", description: "For Trip To Space", unit_price: 10000000)
-    @item_6 = Item.create!(merchant_id: @merchant_3.id, name: "TV", description: "52 Inch Flat Screen", unit_price: 90999)
+    @item_1 = Item.create!(merchant_id: @merchant_1.id, name: "Candy Dispenser", description: "Dispenses Candy", unit_price: 4291, status: 0)
+    @item_2 = Item.create!(merchant_id: @merchant_1.id, name: "Towel", description: "100% Cotton", unit_price: 15, status: 1)
+    @item_3 = Item.create!(merchant_id: @merchant_2.id, name: "Bowl", description: "Ceramic, Blue", unit_price: 5, status: 1)
+    @item_4 = Item.create!(merchant_id: @merchant_2.id, name: "Napkin Holder", description: "Shaped Like A Taco", unit_price: 45, status: 1)
+    @item_5 = Item.create!(merchant_id: @merchant_2.id, name: "Rocket Ship", description: "For Trip To Space", unit_price: 10000000, status: 1)
+    @item_6 = Item.create!(merchant_id: @merchant_3.id, name: "TV", description: "52 Inch Flat Screen", unit_price: 90999, status: 0)
     
     @invoice_item_1 = InvoiceItem.create!(item_id: @item_1.id, invoice_id: @invoice_1.id, quantity: 738, unit_price: 4291, status: 0)
     @invoice_item_2 = InvoiceItem.create!(item_id: @item_2.id, invoice_id: @invoice_1.id, quantity: 12, unit_price: 15, status: 1)
@@ -77,8 +77,8 @@ RSpec.describe "Admin Invoices Show Page", type: :feature do
       visit "admin/invoices/#{@invoice_1.id}"
       
       expect(page).to have_content("Invoice #: #{@invoice_1.id}")
-      expect(page).to have_content("Status: #{@invoice_1.status}")
-      expect(page).to have_content("Created on: #{@invoice_1.formatted_date}")
+      expect(page).to have_content("#{@invoice_1.status}")
+      expect(page).to have_content("Created On: #{@invoice_1.formatted_date}")
       expect(page).to have_content("Customer: #{@invoice_1.customer.first_name} #{@invoice_1.customer.last_name}")
 
       expect(page).to have_no_content("Invoice #: #{@invoice_2.id}")
@@ -94,13 +94,47 @@ RSpec.describe "Admin Invoices Show Page", type: :feature do
     ordered, the price the item sold for and the invoice_item status" do
       visit "admin/invoices/#{@invoice_1.id}"
 
-      has_table?("table")
+      expect(page).to have_css("table")
 
-      within("#invoice-#{@item_1.id}") do
-        expect(page).to have_content("Candy Dispenser")
-        expect(page).to have_content("#{@item_1.name}")
-        expect(page).to have_content("#{@item_1.name}")
-        expect(page).to have_content("#{@item_1.name}")
+      within("#invoice-#{@invoice_item_1.item.id}") do
+        expect(page).to have_content(@invoice_item_1.item.name)
+        expect(page).to have_content(@invoice_item_1.quantity)
+        expect(page).to have_content("$4,291.00")
+        expect(page).to have_content(@invoice_item_1.status)
       end
+
+      expect(page).to have_no_content(@invoice_item_6.item.name)
+  end
+
+  it "the invoice status is a select field, and the invoice's current status is selected" do
+    visit "admin/invoices/#{@invoice_1.id}"
+
+    within("#invoice-#{@invoice_1.id}") do
+      expect(page).to have_field("status")
+      expect(page).to have_content("completed")
+      expect(@invoice_1.status).to eq("completed")
+      expect(page).to have_button("Update Invoice Status")
     end
-end
+  end 
+
+  it "when the Update Invoice Status button is clicked, the item status will be
+    updated with the status chosen and the user will be redirected back to the
+    admin invoice show page" do
+      visit "admin/invoices/#{@invoice_1.id}"
+
+      within("#invoice-#{@invoice_1.id}") do
+        expect(@invoice_1.status).to eq("completed")
+
+        page.select("in progress", from: :status)
+        click_button "Update Invoice Status"
+
+        expect(current_path).to eq(admin_invoice_path(@invoice_1.id))
+        expect(page).to have_content(@invoice_1.status)
+
+        @current_invoice = Invoice.order(:updated_at).last
+
+        expect(@current_invoice.id).to eq(@invoice_1.id)
+        expect(@current_invoice.status).to eq("in progress")
+      end
+  end
+end 
