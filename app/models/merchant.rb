@@ -27,7 +27,7 @@ class Merchant < ApplicationRecord
   def invoices_not_shipped
     invoice_items.where(status: %w[0 1])
   end
-  
+
   def merchant_top_5_customers
     Customer.select(:id, :first_name, :last_name, 'count(transactions.*) as number_transactions').joins(invoices: [:items, :transactions]).where(['items.merchant_id = ? and transactions.result = ?', self.id, 'success']).group(:id).order('number_transactions desc').limit(5)
   end
@@ -38,6 +38,7 @@ class Merchant < ApplicationRecord
          .where('result = ?', 'success')
          .order('total_revenue desc')
          .limit(5)
+
   end
 
   def best_day(item_id)
