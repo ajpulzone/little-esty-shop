@@ -3,11 +3,11 @@ Rails.application.routes.draw do
 
   # feel free to remove or change or delete this resource; ask MM if you have any questions about it
 
+  root 'welcome#index'
+
   resources :merchants, only: [:index]
 
   get 'merchants/:id/dashboard', to: 'merchants#show'
-
-  get '/api/index', to: 'api#index'
 
   resources :merchants do
     resources :invoices, only: %i[index show]
