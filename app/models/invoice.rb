@@ -11,7 +11,7 @@ class Invoice < ApplicationRecord
   end
 
   def numerical_date
-    created_at.strftime('%-m/%e/%y')
+    created_at.strftime('%-m/%-e/%y')
   end
 
   def self.incomplete_invoices
