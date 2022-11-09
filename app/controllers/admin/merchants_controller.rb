@@ -16,12 +16,12 @@ class Admin::MerchantsController < ApplicationController
   end
 
   def create
-    @merchant = Merchant.create(merchant_params)
-    if @merchant.valid?
+    merchant = Merchant.new(merchant_params)
+    if merchant.save
       redirect_to admin_merchants_path
     else
-      flash[:errors] = @merchant.errors.full_messages
-      render new
+      flash[:notice] = "Merchant not created: Required information missing"
+      redirect_to '/admin/merchants/new'
     end
   end
 
