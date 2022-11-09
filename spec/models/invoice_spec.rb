@@ -40,7 +40,7 @@ RSpec.describe Invoice, type: :model do
 
     describe '#numerical_date' do
       it "displays the date as 'Weekday, Month Day, Year'" do
-        expect(@invoice1.numerical_date).to eq(@invoice1.created_at.strftime('%-m/%e/%y'))
+        expect(@invoice1.numerical_date).to eq(@invoice1.created_at.strftime('%-m/%-e/%y'))
       end
     end
 
