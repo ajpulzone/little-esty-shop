@@ -2,10 +2,7 @@ class Merchant < ApplicationRecord
   has_many :items
   has_many :invoice_items, through: :items
   has_many :invoices, through: :invoice_items
-<<<<<<< HEAD
-=======
   has_many :customers, through: :invoices
->>>>>>> 0a9eb793dde9ce24bce070d33fe87234cca924ad
   has_many :transactions, through: :invoices
 
   validates_presence_of :name
