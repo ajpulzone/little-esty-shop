@@ -1,4 +1,5 @@
-require "rails_helper"
+require 'rails_helper'
+require 'faker'
 
 RSpec.describe "Admin Merchants Index Page", type: :feature do
   
@@ -18,10 +19,10 @@ RSpec.describe "Admin Merchants Index Page", type: :feature do
   
     @invoice_1 = @customer_1.invoices.create!(status: 0)
     @invoice_2 = @customer_1.invoices.create!(status: 0)
-    @invoice_3 = @customer_1.invoices.create!(status: 1)
+    @invoice_3 = @customer_1.invoices.create!(status: 1, created_at: DateTime.new(2022, 10, 29, 9, 54, 9))
     @invoice_4 = @customer_1.invoices.create!(status: 2)
     @invoice_5 = @customer_1.invoices.create!(status: 2)
-    @invoice_6 = @customer_2.invoices.create!(status: 0)
+    @invoice_6 = @customer_2.invoices.create!(status: 0, created_at: DateTime.new(2022, 10, 31, 9, 54, 9))
     @invoice_7 = @customer_2.invoices.create!(status: 0)
     @invoice_8 = @customer_3.invoices.create!(status: 0)
     @invoice_9 = @customer_3.invoices.create!(status: 0)
@@ -54,7 +55,7 @@ RSpec.describe "Admin Merchants Index Page", type: :feature do
 
     @transaction_1 = @invoice_1.transactions.create!(credit_card_number: 4654405418249632, result: "success")
     @transaction_2 = @invoice_2.transactions.create!(credit_card_number: 4580251236515201, result: "success")
-    @transaction_3 = @invoice_3.transactions.create!(credit_card_number: 4354495077693036, result: "failed")
+    @transaction_3 = @invoice_3.transactions.create!(credit_card_number: 4354495077693036, result: "success")
     @transaction_4 = @invoice_4.transactions.create!(credit_card_number: 4515551623735607, result: "failed")
     @transaction_5 = @invoice_5.transactions.create!(credit_card_number: 4844518708741275, result: "failed")
     @transaction_6 = @invoice_6.transactions.create!(credit_card_number: 4203696133194408, result: "success")
@@ -173,18 +174,15 @@ RSpec.describe "Admin Merchants Index Page", type: :feature do
     visit "/admin/merchants"
 
     within "#top_five_merchant_#{@merchant_3.id}" do
-      expect(page).to have_content("$671,572.62 in sales")
+      expect(page).to have_content("$1,343,145.24 in sales")
     end
   end
-
-  # When I visit the admin merchants index
-  # Then next to each of the 5 merchants by revenue I see the date with the most revenue for each merchant.
-  # And I see a label “Top selling date for was "
-  # Note: use the invoice date.
-  # If there are multiple days with equal number of sales, return the most recent day.
 
   it 'displays the top selling date for each top 5 merchant' do
     visit "/admin/merchants"
 
+    within "#top_five_merchant_#{@merchant_3.id}" do
+      expect(page).to have_content("Top day for #{@merchant_3.name} was 10/31/22")
+    end
   end
 end
