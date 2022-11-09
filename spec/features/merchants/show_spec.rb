@@ -39,7 +39,7 @@ RSpec.describe 'Merchant Dashboard' do
       expect(current_path).to eq("/merchants/#{@merchant.id}/invoices")
     end
 
-    xit "I see a section for 'Items Ready to Ship' In that section I see a list
+    it "I see a section for 'Items Ready to Ship' In that section I see a list
     of the names of all of my items that have been ordered and have not yet
     been shipped, And next to each Item I see the id of the invoice that
     ordered my item And each invoice id is a link to my merchant's invoice show
@@ -60,7 +60,7 @@ RSpec.describe 'Merchant Dashboard' do
       expect(current_path).to eq("/merchants/#{@merchant.id}/invoices/#{@customer1_invoice.id}")
     end
 
-    xit "Item's Ready to Ship includes the date the invoice was created
+    it "Item's Ready to Ship includes the date the invoice was created
     formatted as 'Monday, July 18, 2019' and they appear from oldest to newest" do
       within("#dashboard-items_to_ship") do
         expect(page).to have_content("#{@item_1.name} Invoice ##{@customer1_invoice.id} - #{@customer1_invoice.created_at.strftime('%A, %B%e, %Y')}")
@@ -73,7 +73,7 @@ RSpec.describe 'Merchant Dashboard' do
 
     end
 
-    xit "I see the names of the top 5 customers who have conducted the largest
+    it "I see the names of the top 5 customers who have conducted the largest
     number of successful transactions with my merchant And next to each
     customer name I see the number of successful transactions they have
     conducted with my merchant" do

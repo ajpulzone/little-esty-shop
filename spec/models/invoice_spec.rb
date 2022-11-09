@@ -38,13 +38,6 @@ RSpec.describe Invoice, type: :model do
       end
     end
 
-    #AJP made this method below. Can delete if Gabe has also not done it
-    xdescribe '#invoice_revenue' do
-      it 'returns the total revenue for items sold on this invoice' do
-        expect(@invoice1.invoice_revenue(@invoice1.id)).to eq(5400)
-      end
-    end
-
     describe "#incomplete_invoices" do
     
       before(:each) do
