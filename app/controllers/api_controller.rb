@@ -1,5 +1,6 @@
 require 'net/https'
 require 'JSON'
+require_relative '../poros/github_repo_search'
 
 class ApiController < ApplicationController
   def index
@@ -12,5 +13,6 @@ class ApiController < ApplicationController
     @repo_data = Net::HTTP.get(repo_uri)
     @repo_data = JSON.parse(@repo_data)
     @project_repo = @repo_data.find { |x| x['name'] == 'little-esty-shop' }
+    # @repos = GithubRepoSearch.new.repos
   end
 end
