@@ -136,8 +136,6 @@ RSpec.describe Merchant do
         customer3 = create(:customer)
         customer4 = create(:customer)
         customer5 = create(:customer)
-        customer6 = create(:customer)
-        customer7 = create(:customer)
 
         customer1_invoice = create(:invoice, customer: customer1)
         customer2_invoice = create(:invoice, customer: customer2)
@@ -161,6 +159,43 @@ RSpec.describe Merchant do
       end
     end
 
+    describe '#top_revenue_date' do
+      it 'returns the date the merchant made the most revenue' do
+        merchant = create(:merchant)
+        
+        item_1 = create(:item, merchant: merchant, unit_price: 1)
+        item_2 = create(:item, merchant: merchant, unit_price: 1000)
+        item_3 = create(:item, merchant: merchant, unit_price: 10)
+        item_4 = create(:item, merchant: merchant, unit_price: 10000)
+        item_5 = create(:item, merchant: merchant, unit_price: 100)
+
+        customer1 = create(:customer)
+        customer2 = create(:customer)
+        customer3 = create(:customer)
+        customer4 = create(:customer)
+        customer5 = create(:customer)
+
+        customer1_invoice = create(:invoice, customer: customer1)
+        customer2_invoice = create(:invoice, customer: customer2)
+        customer3_invoice = create(:invoice, customer: customer3)
+        customer4_invoice = create(:invoice, customer: customer4, created_at: DateTime.new(2022, 10, 31, 9, 54, 9))
+        customer5_invoice = create(:invoice, customer: customer5)
+
+        customer1_transactions = create_list(:transaction, 1, invoice: customer1_invoice, result: 'success')
+        customer2_transactions = create_list(:transaction, 1, invoice: customer2_invoice, result: 'success')
+        customer3_transactions = create_list(:transaction, 1, invoice: customer3_invoice, result: 'success')
+        customer4_transactions = create_list(:transaction, 1, invoice: customer4_invoice, result: 'success')
+        customer5_transactions = create_list(:transaction, 1, invoice: customer5_invoice, result: 'success')
+
+        customer1_invoice_item = create(:invoice_item, invoice: customer1_invoice, item: item_1, unit_price: 1, quantity: 1, status: 0)
+        customer2_invoice_item = create(:invoice_item, invoice: customer2_invoice, item: item_2, unit_price: 1000, quantity: 1, status: 1)
+        customer3_invoice_item = create(:invoice_item, invoice: customer3_invoice, item: item_3, unit_price: 10, quantity: 1, status: 2)
+        customer4_invoice_item = create(:invoice_item, invoice: customer4_invoice, item: item_4, unit_price: 10000, quantity: 1, status: 0)
+        customer5_invoice_item = create(:invoice_item, invoice: customer5_invoice, item: item_5, unit_price: 100, quantity: 1, status: 1)
+
+        expect(merchant.top_revenue_date).to match("10/31/22")
+      end
+    end
 
     describe '#five_most_popular_items_by_revenue' do
       it 'returns the 5 most popular items by revenue' do
