@@ -25,11 +25,18 @@ class Merchant < ApplicationRecord
   end
 
   def invoices_not_shipped
-    invoice_items.where(status: %w[0 1])
+    invoice_items.select('invoice_items.*')
+    .where(status: [0, 1])
+    .joins(:invoice)
+    .order('invoices.created_at')
   end
 
   def merchant_top_5_customers
-    Customer.select(:id, :first_name, :last_name, 'count(transactions.*) as number_transactions').joins(invoices: [:items, :transactions]).where(['items.merchant_id = ? and transactions.result = ?', self.id, 'success']).group(:id).order('number_transactions desc').limit(5)
+    Customer.select(:id, :first_name, :last_name, 'count(transactions.*) as number_transactions')
+    .joins(invoices: [:items, :transactions])
+    .where(['items.merchant_id = ? and transactions.result = ?', self.id, 'success'])
+    .group(:id).order('number_transactions desc')
+    .limit(5)
   end
 
   def five_most_popular_items_by_revenue
