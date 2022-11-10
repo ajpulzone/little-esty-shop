@@ -1,5 +1,15 @@
-<h1>Merchant Invoices Index Page</h1>
+<br>
+<h1><%= @merchant.name %></h1>
 
-<% @merchant.unique_invoices.each do |invoice| %>
-  <p>Invoice #<%= link_to "#{invoice.id}", "/merchants/#{@merchant.id}/invoices/#{invoice.id}" %></p>
-<% end %>
+<div class="d-flex justify-content-center">
+  <h2>My Invoices</h2>
+  </div>
+    <ul style="list-style-type:none;", id="merchant-invoices">
+      <% @merchant.unique_invoices.each do |invoice| %>
+        <li>
+          Invoice #<%= link_to "#{invoice.id}", "/merchants/#{@merchant.id}/invoices/#{invoice.id}" %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>
