@@ -1,25 +1,45 @@
 <%= render partial: "shared/admin_dashboard" %>
+<br>
+<p><%= link_to "New Merchant", "/admin/merchants/new" %></p>
 
-<h1>Admin Merchants</h1>
+<div class="container">
+  <div class="row align-items-start">
+    <div class="col">
+      <ul style="list-style-type:none;", id="admin-enabled_merchants">
+        <h3>Enabled Merchants: </h3>
+          <% @merchants.each do |merchant| %>
+            <% if merchant.enabled? %>
+            <li id="enab_merchant-<%= merchant.id%>">
+              Name: <%= link_to "#{merchant.name}", admin_merchant_path(merchant.id) %> <%= button_to 'Disable?', admin_merchant_path(merchant.id), form: {style: "display:inline-block;"}, method: :patch, params: { status: 'disabled' } %>
+            </li>
+            <% end %>
+          <% end %>
+      </ul>
+      <ul style="list-style-type:none;", id="admin-disabled_merchants">
+        <h3>Disabled Merchants: </h3>
+          <% @merchants.each do |merchant| %>
+            <% if merchant.disabled? %>
+            <li id="disab_merchant-<%= merchant.id%>">
+              Name: <%= link_to "#{merchant.name}", admin_merchant_path(merchant.id) %> <%= button_to 'Enable?', admin_merchant_path(merchant.id), form: {style: "display:inline-block;"}, method: :patch, params: { status: 'enabled' } %></p>
+          </li>
+          <% end %>
+        <% end %>
+      </ul>
+  </div>
+    <div class="col">
+      <ol id="top_five_merchants">
+        <h3>Top Five Merchants:</h3>
+          <% @merchants.top_five_merchants.each do |merchant| %>
+          <div id="top_five_merchant_<%= merchant.id %>">
+            <li><%= link_to "#{merchant.name}", admin_merchant_path(merchant.id) %> - <%= number_to_currency(merchant.total_revenue / 100.00) %> in sales</li>
+            <p>Top day for <%= merchant.name %> was <%= merchant.top_revenue_date %></p>
+            <% end %>
+          </div>
+      </ol>
+    </div>
+  </div>
+</div>
 
-<h3>Enabled Merchants: </h3>
-  <ul id="admin-enabled_merchants">
-    <% @merchants.each do |merchant| %>
-      <% if merchant.enabled? %>
-        <li id="enab_merchant-<%= merchant.id%>">
-          Name: <%= link_to "#{merchant.name}", admin_merchant_path(merchant.id) %> <%= button_to 'Disable?', admin_merchant_path(merchant.id), form: {style: "display:inline-block;"}, method: :patch, params: { status: 'disabled' } %>
-        </li>
-      <% end %>
-    <% end %>
-  </ul>
 
-<h3>Disabled Merchants: </h3>
-  <ul id="admin-disabled_merchants">
-    <% @merchants.each do |merchant| %>
-      <% if merchant.disabled? %>
-        <li id="disab_merchant-<%= merchant.id%>">
-          Name: <%= link_to "#{merchant.name}", admin_merchant_path(merchant.id) %> <%= button_to 'Enable?', admin_merchant_path(merchant.id), form: {style: "display:inline-block;"}, method: :patch, params: { status: 'enabled' } %></p>
-       </li>
-      <% end %>
-    <% end %>
-  </ul>
+  
+

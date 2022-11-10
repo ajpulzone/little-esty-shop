@@ -1,4 +1,5 @@
-require "rails_helper"
+require 'rails_helper'
+require 'faker'
 
 RSpec.describe "Admin Merchants Index Page", type: :feature do
   
@@ -18,10 +19,10 @@ RSpec.describe "Admin Merchants Index Page", type: :feature do
   
     @invoice_1 = @customer_1.invoices.create!(status: 0)
     @invoice_2 = @customer_1.invoices.create!(status: 0)
-    @invoice_3 = @customer_1.invoices.create!(status: 1)
+    @invoice_3 = @customer_1.invoices.create!(status: 1, created_at: DateTime.new(2022, 10, 29, 9, 54, 9))
     @invoice_4 = @customer_1.invoices.create!(status: 2)
     @invoice_5 = @customer_1.invoices.create!(status: 2)
-    @invoice_6 = @customer_2.invoices.create!(status: 0)
+    @invoice_6 = @customer_2.invoices.create!(status: 0, created_at: DateTime.new(2022, 10, 31, 9, 54, 9))
     @invoice_7 = @customer_2.invoices.create!(status: 0)
     @invoice_8 = @customer_3.invoices.create!(status: 0)
     @invoice_9 = @customer_3.invoices.create!(status: 0)
@@ -50,10 +51,11 @@ RSpec.describe "Admin Merchants Index Page", type: :feature do
     @invoice_item_4 = InvoiceItem.create!(item_id: @item_4.id, invoice_id: @invoice_2.id, quantity: 44567, unit_price: 45, status: 1)
     @invoice_item_5 = InvoiceItem.create!(item_id: @item_5.id, invoice_id: @invoice_2.id, quantity: 1, unit_price: 10000000, status: 2)
     @invoice_item_6 = InvoiceItem.create!(item_id: @item_6.id, invoice_id: @invoice_3.id, quantity: 738, unit_price: 90999, status: 2)
+    @invoice_item_7 = InvoiceItem.create!(item_id: @item_6.id, invoice_id: @invoice_6.id, quantity: 738, unit_price: 90999, status: 2)
 
     @transaction_1 = @invoice_1.transactions.create!(credit_card_number: 4654405418249632, result: "success")
     @transaction_2 = @invoice_2.transactions.create!(credit_card_number: 4580251236515201, result: "success")
-    @transaction_3 = @invoice_3.transactions.create!(credit_card_number: 4354495077693036, result: "failed")
+    @transaction_3 = @invoice_3.transactions.create!(credit_card_number: 4354495077693036, result: "success")
     @transaction_4 = @invoice_4.transactions.create!(credit_card_number: 4515551623735607, result: "failed")
     @transaction_5 = @invoice_5.transactions.create!(credit_card_number: 4844518708741275, result: "failed")
     @transaction_6 = @invoice_6.transactions.create!(credit_card_number: 4203696133194408, result: "success")
@@ -147,5 +149,70 @@ RSpec.describe "Admin Merchants Index Page", type: :feature do
       
       expect(current_path).to eq(admin_merchant_path(@merchant_1.id))
       expect(page).to have_content(@merchant_1.name)
+  end
+
+  # As an admin,
+  # When I visit the admin merchants index
+  # I see a link to create a new merchant.
+  # When I click on the link,
+  # I am taken to a form that allows me to add merchant information.
+  # When I fill out the form I click ‘Submit’
+  # Then I am taken back to the admin merchants index page
+  # And I see the merchant I just created displayed
+  # And I see my merchant was created with a default status of disabled.
+  it 'has a link to create a new merchant' do
+    visit "/admin/merchants"
+
+    expect(page).to have_link('New Merchant')
+  end
+
+  it 'can create a new merchant with a default status of disabled' do
+    visit "/admin/merchants"
+
+    click_link('New Merchant')
+    expect(current_path).to eq('/admin/merchants/new')
+
+    fill_in('Merchant Name', with: 'HomeGoods')
+    click_button('Add Merchant')
+    new_merchant = Merchant.last
+
+    expect(current_path).to eq('/admin/merchants')
+    expect(page).to have_content(new_merchant.name)
+    expect(new_merchant.status).to eq('disabled')
+  end
+
+  it 'displays the top five merchants by total revenue' do
+    visit "/admin/merchants"
+
+    within '#top_five_merchants' do
+      expect("#{@merchant_3.name}").to appear_before("#{@merchant_2.name}")
+      expect("#{@merchant_2.name}").to appear_before("#{@merchant_1.name}")
+    end
+  end
+
+  it "has a link to each top five merchant's show page" do
+    visit "/admin/merchants"
+
+    within "#top_five_merchant_#{@merchant_3.id}" do
+      expect(page).to have_link("#{@merchant_3.name}")
+      click_link("#{@merchant_3.name}")
+      expect(current_path).to eq(admin_merchant_path(@merchant_3.id))
+    end
+  end
+
+  it 'displays the total revenue next to each merchant name' do
+    visit "/admin/merchants"
+
+    within "#top_five_merchant_#{@merchant_3.id}" do
+      expect(page).to have_content("$1,343,145.24 in sales")
+    end
+  end
+
+  it 'displays the top selling date for each top 5 merchant' do
+    visit "/admin/merchants"
+
+    within "#top_five_merchant_#{@merchant_3.id}" do
+      expect(page).to have_content("Top day for #{@merchant_3.name} was 10/31/22")
+    end
   end
 end
