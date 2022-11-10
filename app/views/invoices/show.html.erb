@@ -1,5 +1,4 @@
-<br>
-<h2><%= @merchant.name %></h2>
+<%= render partial: "shared/navbar", locals: {merchant_name: @merchant.name} %>
 
 <div class="d-flex justify-content-center">
   <h3>Invoice #<%= @invoice.id %></h3>
