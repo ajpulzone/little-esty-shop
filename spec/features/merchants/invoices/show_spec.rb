@@ -27,7 +27,7 @@ RSpec.describe 'the merchant invoices show page' do
     expect(page).to have_content("Invoice ##{@invoice1.id}")
     expect(page).to have_content("Status: in progress")
     expect(page).to have_content("Created on: #{@invoice1.created_at.strftime('%A, %B%e, %Y')}")
-    expect(page).to have_content("Customer: #{@mary.first_name} #{@mary.last_name}")
+    expect(page).to have_content("#{@mary.first_name} #{@mary.last_name}")
   end
 
   it 'display name/quantity/price/status for all invoice items' do
