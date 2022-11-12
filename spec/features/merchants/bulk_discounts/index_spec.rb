@@ -193,7 +193,7 @@ RSpec.describe "Bulk Discounts Index Page", type: :feature do
   it "if the form is not completely filled out, the bulk discount will not be created, the
     merchant will be redirected back to the new bulk discount page and there will be an alert
     'Unable to complete your request, please fill out all fields'" do
-      
+
       visit "/merchants/#{@merchant_1.id}/bulk_discounts/new"
 
       fill_in :discount_percent,	with: 20
@@ -202,5 +202,48 @@ RSpec.describe "Bulk Discounts Index Page", type: :feature do
 
       expect(current_path).to eq(new_merchant_bulk_discount_path(@merchant_1.id))
       expect(page).to have_content("Unable to complete your request, please fill out all fields")
+    end
+
+    it "on the bulk discounts index page there is a link next to eah bulk discount to delete it" do
+      visit "/merchants/#{@merchant_1.id}/bulk_discounts"
+
+      within("#discount-#{@bulk_discount_1.id}") do
+        expect(page).to have_link "Delete Discount?"
+      end 
+
+      within("#discount-#{@bulk_discount_2.id}") do
+        expect(page).to have_link "Delete Discount?"
+      end
+
+      within("#discount-#{@bulk_discount_3.id}") do
+        expect(page).to have_link "Delete Discount?"
+      end
+
+      within("#discount-#{@bulk_discount_4.id}") do
+        expect(page).to have_link "Delete Discount?"
+      end
+
+      within("#discount-#{@bulk_discount_5.id}") do
+        expect(page).to have_link "Delete Discount?"
+      end
+    end
+
+    it "when the delete link is clicked, then the merchant is redirected back to the bulk discounts
+      index page and the discount is no longer listed" do
+        visit "/merchants/#{@merchant_1.id}/bulk_discounts"
+
+        expect(page).to have_content(@bulk_discount_1.id)
+
+        within("#discount-#{@bulk_discount_1.id}") do
+          click_link "Delete Discount?"
+        end
+
+        expect(current_path).to eq(merchant_bulk_discounts_path(@merchant_1.id))
+save_and_open_page
+        expect(page).to have_no_content(@bulk_discount_1.id)
+        expect(page).to have_content(@bulk_discount_2.id)
+        expect(page).to have_content(@bulk_discount_3.id)
+        expect(page).to have_content(@bulk_discount_4.id)
+        expect(page).to have_content(@bulk_discount_5.id)
     end
 end
