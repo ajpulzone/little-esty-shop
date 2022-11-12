@@ -19,6 +19,9 @@
             <td><%= link_to "#{discount.id}", bulk_discount_path(discount.id) %></td>
             <td><%= discount.discount_percent %></td>
             <td><%= discount.quantity_threshold %></td>  
+            <td><%= discount.quantity_threshold %></td>
+            <td><%= link_to "Delete Discount?", bulk_discount_path(discount.id), method: :delete %>  
           </tr>
         <% end %>
   </table>
+
