@@ -91,4 +91,67 @@ RSpec.describe "Bulk Discount Show Page", type: :feature do
       expect(page).to have_content(@bulk_discount_1.quantity_threshold)
       expect(page).to have_no_content(@bulk_discount_2.id)
   end
+
+  it "when visiting a specified bulk discounts' show page, there is a link to edit the bulk discount "do
+    visit bulk_discount_path(@bulk_discount_1.id)
+
+    expect(page).to have_link "Update Bulk Discount"
+  end
+
+  it "when this link is clicked, the merchant is redirected to a new page with a form to edit the discount
+    and the discounts current attributes are pre-populated in the form" do
+      visit bulk_discount_path(@bulk_discount_1.id)
+
+      click_link "Update Bulk Discount"
+
+      expect(current_path).to eq(edit_bulk_discount_path(@bulk_discount_1.id))
+      expect(page).to have_field(:discount_percent, with: "#{@bulk_discount_1.discount_percent}")
+      expect(page).to have_field(:quantity_threshold, with: "#{@bulk_discount_1.quantity_threshold}")
+      expect(page).to have_no_field(:quantity_threshold, with: "")
+      expect(page).to have_no_field(:quantity_threshold, with: "")
+      expect(page).to have_button("Submit")
+  end
+
+  it "when any/all of the information is changed and the submit button is clicked, the merchant is
+    redirected to the bulk discounts show page and the attributes have been updated" do
+      visit edit_bulk_discount_path(@bulk_discount_1.id)
+
+      expect(@bulk_discount_1.discount_percent).to eq(10)
+      expect(@bulk_discount_1.quantity_threshold).to eq(15)
+
+      fill_in :discount_percent,	with: 20
+      fill_in :quantity_threshold,	with: 50
+      click_button "Submit"
+
+      expect(current_path).to eq(bulk_discount_path(@bulk_discount_1.id))
+
+      within("#bulk-discount-#{@bulk_discount_1.id}") do
+        expect(page).to have_content(20)
+        expect(page).to have_content(50)
+        expect(page).to have_no_content(10)
+        expect(page).to have_no_content(15)
+      end 
+  end
+
+  it "if the form has any portion left empty and is submitted, the merchant will be redirected
+    back to the edit page and see a message 'Unable to complete your request, please ensure all 
+    fields are filled out' and the values that were inserted will not be updated" do
+      visit edit_bulk_discount_path(@bulk_discount_1.id)
+
+      expect(@bulk_discount_1.discount_percent).to eq(10)
+      expect(@bulk_discount_1.quantity_threshold).to eq(15)
+
+      fill_in :discount_percent,	with: ""
+      fill_in :quantity_threshold,	with: 30
+      click_button "Submit"
+
+      expect(current_path).to eq(edit_bulk_discount_path(@bulk_discount_1.id))
+      expect(page).to have_content("Unable to complete your request, please ensure all fields are filled out")
+
+      visit bulk_discount_path(@bulk_discount_1.id)
+      within("#bulk-discount-#{@bulk_discount_1.id}") do
+        expect(page).to have_content(10)
+        expect(page).to have_content(15)
+      end 
+    end
 end 

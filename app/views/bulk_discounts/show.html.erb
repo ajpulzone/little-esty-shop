@@ -1,4 +1,7 @@
 <h1>Bulk Discount #: <%= @bulk_discount.id %></h1>
 
-*Quantity Threshold: <%= @bulk_discount.quantity_threshold %>
-*Percentage Discount: %<%= @bulk_discount.discount_percent %>
+<div id="bulk-discount-<%= @bulk_discount.id %>">
+  <%= link_to "Update Bulk Discount", edit_bulk_discount_path(@bulk_discount.id) %>  
+  *Quantity Threshold: <%= @bulk_discount.quantity_threshold %>
+  *Percentage Discount: %<%= @bulk_discount.discount_percent %>
+</div>

@@ -30,6 +30,20 @@ class BulkDiscountsController < ApplicationController
     redirect_to merchant_bulk_discounts_path(@bulk_discount.merchant)
   end
 
+  def edit
+    @bulk_discount = BulkDiscount.find(params[:id])
+  end
+
+  def update
+    @bulk_discount = BulkDiscount.find(params[:id])
+    if @bulk_discount.update(bulk_discount_params)
+      redirect_to bulk_discount_path(@bulk_discount.id)
+    else 
+    flash[:alert] = "Unable to complete your request, please ensure all fields are filled out"
+      redirect_to edit_bulk_discount_path(@bulk_discount.id)
+    end
+  end
+
 private
 
   def bulk_discount_params
