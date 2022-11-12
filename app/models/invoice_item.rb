@@ -7,4 +7,8 @@ class InvoiceItem < ApplicationRecord
   def item_name
     item.name
   end
+
+  def invoice_item_discount
+    
+  end
 end
