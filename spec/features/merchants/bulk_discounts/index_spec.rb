@@ -138,16 +138,69 @@ RSpec.describe "Bulk Discounts Index Page", type: :feature do
 
   it "and the id of each bulk discount listed is a link to that bulk discounts show page" do
     visit "/merchants/#{@merchant_1.id}/bulk_discounts"
-save_and_open_page
-        expect(page).to have_link("#{@bulk_discount_1.id}")
-        expect(page).to have_link("#{@bulk_discount_2.id}")
-        expect(page).to have_link("#{@bulk_discount_3.id}")
-        expect(page).to have_link("#{@bulk_discount_4.id}")
-        expect(page).to have_link("#{@bulk_discount_5.id}")
-        expect(page).to have_no_link("#{@bulk_discount_6.id}")
-        expect(page).to have_no_link("#{@bulk_discount_7.id}")
+      expect(page).to have_link("#{@bulk_discount_1.id}")
+      expect(page).to have_link("#{@bulk_discount_2.id}")
+      expect(page).to have_link("#{@bulk_discount_3.id}")
+      expect(page).to have_link("#{@bulk_discount_4.id}")
+      expect(page).to have_link("#{@bulk_discount_5.id}")
+      expect(page).to have_no_link("#{@bulk_discount_6.id}")
+      expect(page).to have_no_link("#{@bulk_discount_7.id}")
 
       click_link "#{@bulk_discount_1.id}"
-      expect(current_path).to eq( bulk_discount_path(@bulk_discount_1.id))
+      expect(current_path).to eq(bulk_discount_path(@bulk_discount_1.id))
+      expect(current_path).to_not eq(bulk_discount_path(@bulk_discount_2.id))
   end
+
+  it "there is a link on a merchants bulk discounts index page to create a new discount" do
+    visit "/merchants/#{@merchant_1.id}/bulk_discounts"
+
+    expect(page).to have_link "Create A New Bulk Discount"
+
+  end
+
+  it "when the 'Create A New Discount' link is clicked, the merchant is taken to a new page where
+    there is a form to add a new bulk discount" do
+
+      visit "/merchants/#{@merchant_1.id}/bulk_discounts"
+      click_link "Create A New Bulk Discount"
+
+      expect(current_path).to eq(new_merchant_bulk_discount_path(@merchant_1.id))
+      expect(page).to have_field(:discount_percent)
+      expect(page).to have_field(:quantity_threshold)
+      expect(page).to have_button("Submit")
+
+  end
+
+  it "when the form is filled in with valid data, and the submit button is clicked then the merchant
+    is redirected back to the bulk discount index page and the new bulk discount is listed" do
+
+      visit "/merchants/#{@merchant_1.id}/bulk_discounts/new"
+
+      fill_in :discount_percent,	with: 20
+      fill_in :quantity_threshold,	with: 50
+      click_button "Submit"
+
+      @bulk_discount = BulkDiscount.last
+
+      expect(current_path).to eq(merchant_bulk_discounts_path(@merchant_1.id))
+      within("#discount-#{@bulk_discount.id}") do
+        expect(page).to have_content(@bulk_discount.id)
+        expect(page).to have_content(@bulk_discount.discount_percent)
+        expect(page).to have_content(@bulk_discount.quantity_threshold)
+      end
+  end
+
+  it "if the form is not completely filled out, the bulk discount will not be created, the
+    merchant will be redirected back to the new bulk discount page and there will be an alert
+    'Unable to complete your request, please fill out all fields'" do
+      
+      visit "/merchants/#{@merchant_1.id}/bulk_discounts/new"
+
+      fill_in :discount_percent,	with: 20
+      fill_in :quantity_threshold,	with: ""
+      click_button "Submit"
+
+      expect(current_path).to eq(new_merchant_bulk_discount_path(@merchant_1.id))
+      expect(page).to have_content("Unable to complete your request, please fill out all fields")
+    end
 end
