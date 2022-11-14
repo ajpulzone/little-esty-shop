@@ -15,7 +15,11 @@ class InvoiceItem < ApplicationRecord
   end
 
   def invoice_item_total_revenue
-    binding.pry
+    quantity * unit_price
+  end
+
+  def total_discount_amount
+  (invoice_item_total_revenue * (best_bulk_discount.discount_percent.to_f/100)).round(0)
   end
 
 end
