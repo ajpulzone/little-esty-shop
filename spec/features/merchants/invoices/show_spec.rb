@@ -176,5 +176,21 @@ RSpec.describe 'the merchant invoices show page' do
           expect(page).to have_content("Total Invoice Revenue: $19.00")
         end
     end 
+
+    it "next to each invoice item, there is a link to the show page for the bulk discount that was applied (if any)" do
+      visit merchant_invoice_path(@merchant_1.id, @invoice_1.id)
+
+      within("#invoice_item_#{@invoice_item_1.id}") do
+        expect(page).to have_link "#{@invoice_item_1.best_bulk_discount.id}"
+        expect(page).to have_no_link "nil"
+      end
+
+      within("#invoice_item_#{@invoice_item_2.id}") do
+        expect(page).to have_link "#{@invoice_item_2.best_bulk_discount.id}"
+        click_link "#{@invoice_item_2.best_bulk_discount.id}"
+      end
+
+      expect(current_path).to eq(bulk_discount_path(@invoice_item_2.best_bulk_discount.id))
+    end
   end
 end

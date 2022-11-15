@@ -24,6 +24,7 @@
         <th>Quantity</th>
         <th>Unit Price</th>
         <th>Status</th>
+        <th>Bulk Discount Applied</th>
       </tr>
     </thead>
 
@@ -39,6 +40,10 @@
                   <%= form.submit 'Update Item Status' %>
                 <% end %>
             </td>
+            <% if invoice_item.best_bulk_discount != nil %>
+            <td>Bulk Discount Applied: <%= link_to "#{invoice_item.best_bulk_discount.id}", bulk_discount_path(invoice_item.best_bulk_discount.id) %>
+            <% end %>
+
           </tr>
         <% end %>
   </table>
