@@ -18,7 +18,7 @@ RSpec.describe 'the merchant invoices show page' do
       @invoiceitem2 = InvoiceItem.create!(item: @item2, invoice: @invoice1, quantity: 2, unit_price: @item2.unit_price, status: 0 )
       @invoiceitem3 = InvoiceItem.create!(item: @item1, invoice: @invoice2, quantity: 1, unit_price: @item1.unit_price, status: 0 )
       @invoiceitem4 = InvoiceItem.create!(item: @item3, invoice: @invoice3, quantity: 1, unit_price: @item3.unit_price, status: 0 )
-      @invoiceitem5 = InvoiceItem.create!(item: @item3, invoice: @invoice1, quantity: 1, unit_price: @item1.unit_price, status: 0 )
+      @invoiceitem5 = InvoiceItem.create!(item: @item3, invoice: @invoice1, quantity: 1, unit_price: @item3.unit_price, status: 0 )
     end
 
     it 'displays the id/status/date/customer name related to the invoice' do
@@ -51,7 +51,7 @@ RSpec.describe 'the merchant invoices show page' do
     it 'display the total revenue for items sold on this invoice' do
       visit "/merchants/#{@merchant1.id}/invoices/#{@invoice1.id}"
 
-      expect(page).to have_content("Total Revenue: $55.00")
+      expect(page).to have_content("GROUP PROJECT Total Revenue (Not accurate): $55.00")
     end
 
     it 'displays the invoice item current status as a select field' do
@@ -126,9 +126,9 @@ RSpec.describe 'the merchant invoices show page' do
       @item_5 = Item.create!(merchant_id: @merchant_2.id, name: "Rocket Ship", description: "For Trip To Space", unit_price: 10000000, status: 1)
       @item_6 = Item.create!(merchant_id: @merchant_3.id, name: "TV", description: "52 Inch Flat Screen", unit_price: 90999, status: 0)
       
-      @invoice_item_1 = InvoiceItem.create!(item_id: @item_1.id, invoice_id: @invoice_1.id, quantity: 56, unit_price: 203, status: 0)
-      @invoice_item_2 = InvoiceItem.create!(item_id: @item_2.id, invoice_id: @invoice_1.id, quantity: 12, unit_price: 150, status: 1)
-      @invoice_item_3 = InvoiceItem.create!(item_id: @item_3.id, invoice_id: @invoice_1.id, quantity: 30, unit_price: 5, status: 2)
+      @invoice_item_1 = InvoiceItem.create!(item_id: @item_1.id, invoice_id: @invoice_1.id, quantity: 738, unit_price: 4291, status: 0)
+      @invoice_item_2 = InvoiceItem.create!(item_id: @item_2.id, invoice_id: @invoice_1.id, quantity: 12, unit_price: 15, status: 1)
+      @invoice_item_3 = InvoiceItem.create!(item_id: @item_3.id, invoice_id: @invoice_1.id, quantity: 554, unit_price: 5, status: 2)
       @invoice_item_4 = InvoiceItem.create!(item_id: @item_4.id, invoice_id: @invoice_2.id, quantity: 44567, unit_price: 45, status: 1)
       @invoice_item_5 = InvoiceItem.create!(item_id: @item_5.id, invoice_id: @invoice_2.id, quantity: 1, unit_price: 10000000, status: 2)
       @invoice_item_6 = InvoiceItem.create!(item_id: @item_6.id, invoice_id: @invoice_3.id, quantity: 738, unit_price: 90999, status: 2)
@@ -170,10 +170,11 @@ RSpec.describe 'the merchant invoices show page' do
       calculation " do
         visit merchant_invoice_path(@merchant_1.id, @invoice_1.id)
 
-        expect(@merchant_1.invoice_1.total_revenue).to eq(131.68)
-        
-      # end
-
-    end
+        within("#revenue") do
+          expect(page).to have_content("Invoice Revenue: $31,697.00")
+          expect(page).to have_content("Total Discounts Applied: -$31,677.00")
+          expect(page).to have_content("Total Invoice Revenue: $19.00")
+        end
+    end 
   end
 end

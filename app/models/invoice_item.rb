@@ -19,7 +19,11 @@ class InvoiceItem < ApplicationRecord
   end
 
   def total_discount_amount
-  (invoice_item_total_revenue * (best_bulk_discount.discount_percent.to_f/100)).round(0)
+    if best_bulk_discount != nil
+      (invoice_item_total_revenue * (best_bulk_discount.discount_percent.to_f/100)).round(0)
+    else
+      0
+    end
   end
 
 end

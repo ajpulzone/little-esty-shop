@@ -22,12 +22,26 @@ class Invoice < ApplicationRecord
     self.joins(:invoice_items).where.not(invoice_items: {status: 2}).distinct.order(:created_at)
   end
 
+  #this method was done in the group project and does not give the right answer
   def total_revenue
     items.sum("unit_price")
   end
 
-  def invoice_item_discount
-    
+  #this method is a new one I created for the solo project and does give the correct answer
+  def total_invoice_revenue
+    invoice_items.sum do |invoice_item|
+    invoice_item.invoice_item_total_revenue
+    end
+  end 
+
+  def total_invoice_discounts
+    invoice_items.sum do |invoice_item|
+      invoice_item.total_discount_amount
+    end
+  end
+
+  def total_discounted_revenue
+    total_invoice_revenue - total_invoice_discounts
   end
   
 end

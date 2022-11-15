@@ -146,7 +146,7 @@ describe "Solo Project Testing" do
       end
     end
 
-    describe "#total_discount_price" do
+    describe "#total_discount_amount" do
       it "should return the total amount discounted from an invoice_item" do
         expect(@invoice_item_1.total_discount_amount).to eq(3166758)
         expect(@invoice_item_2.total_discount_amount).to eq(27)
