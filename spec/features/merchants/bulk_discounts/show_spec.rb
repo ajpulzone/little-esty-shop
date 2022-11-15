@@ -105,6 +105,7 @@ RSpec.describe "Bulk Discount Show Page", type: :feature do
       click_link "Update Bulk Discount"
 
       expect(current_path).to eq(edit_bulk_discount_path(@bulk_discount_1.id))
+      
       expect(page).to have_field(:discount_percent, with: "#{@bulk_discount_1.discount_percent}")
       expect(page).to have_field(:quantity_threshold, with: "#{@bulk_discount_1.quantity_threshold}")
       expect(page).to have_no_field(:quantity_threshold, with: "")
