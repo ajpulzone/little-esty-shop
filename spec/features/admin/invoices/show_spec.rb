@@ -86,7 +86,7 @@ RSpec.describe "Admin Invoices Show Page", type: :feature do
 
   it "should list the total revenue that will be generated from the specified invoice" do
     visit "admin/invoices/#{@invoice_1.id}"
-    expect(page).to have_content("Total Revenue: $4,311.00")
+    expect(page).to have_content("GROUP PROJECT Total Revenue (Not accurate): $43.00")
     expect(page).to have_no_content("Total Revenue: $10,000,045.00")
   end
 
@@ -99,7 +99,7 @@ RSpec.describe "Admin Invoices Show Page", type: :feature do
       within("#invoice-#{@invoice_item_1.item.id}") do
         expect(page).to have_content(@invoice_item_1.item.name)
         expect(page).to have_content(@invoice_item_1.quantity)
-        expect(page).to have_content("$4,291.00")
+        expect(page).to have_content("$42.91")
         expect(page).to have_content(@invoice_item_1.status)
       end
 
@@ -135,6 +135,17 @@ RSpec.describe "Admin Invoices Show Page", type: :feature do
 
         expect(@current_invoice.id).to eq(@invoice_1.id)
         expect(@current_invoice.status).to eq("in progress")
+      end
+  end
+
+  it "shows the total revenue from this invoice (not including discounts) and the total discounted revenue
+    from this invoice which includes bulk discounts" do
+      visit "admin/invoices/#{@invoice_1.id}"
+save_and_open_page      
+      within("#revenue") do
+        expect(page).to have_content("Invoice Revenue: $31,697.08")
+        expect(page).to have_content("Total Discounts Applied: -$0.00")
+        expect(page).to have_content("Total Invoice Revenue: $31,697.08")
       end
   end
 end 
