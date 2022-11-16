@@ -246,18 +246,16 @@ RSpec.describe "Bulk Discounts Index Page", type: :feature do
         expect(page).to have_content(@bulk_discount_5.id)
     end
 
-    # it "has a section with a header of 'Upcoming Holidays', and in this section the name and date of the 
-    #   next 3 upcoming US holidays are listed" do
-    #     visit "/merchants/#{@merchant_1.id}/bulk_discounts"
+    it "has a section with a header of 'Upcoming Holidays', and in this section the name and date of the 
+      next 3 upcoming US holidays are listed" do
+        visit "/merchants/#{@merchant_1.id}/bulk_discounts"
 
-    #     within("#holidays") do
-    #       expect(page).to have_content("Upcoming Holidays")
-    #       expect(page).to have_content("Thanksgiving Day")
-    #       expect(page).to have_content("2022-11-24")
-    #       expect(page).to have_conttent("Christmas Day")
-    #       expect(page).to have_conent("2022-12-25")
-    #       expect(page).to have_conttent("New Year' Day")
-    #       expect(page).to have_conent("2023-01-01")
-    #     end 
-    # end
+        within("#holidays") do
+          expect(page).to have_content("Upcoming Holidays")
+          expect(page).to have_content("Holiday: Thanksgiving Day, Date: 2022-11-24")
+          expect(page).to have_content("Holiday: Christmas Day, Date: 2022-12-26")
+          expect(page).to have_content("Holiday: New Year's Day, Date: 2023-01-02")
+          expect(page).to have_no_content("Holiday: Easter, Date: 2023-04-09")
+        end 
+    end
 end

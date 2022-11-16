@@ -1,7 +1,8 @@
 require "httparty"
 
-class NagerService
-  def repo_name
+class HolidayService
+
+  def holidays
     get_url("https://date.nager.at/api/v3/NextPublicHolidays/US")
   end
 
@@ -9,4 +10,5 @@ class NagerService
     response = HTTParty.get(url)
     JSON.parse(response.body, symbolize_names: true)
   end
+
 end
