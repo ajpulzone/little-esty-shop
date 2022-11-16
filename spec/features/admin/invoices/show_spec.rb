@@ -141,7 +141,7 @@ RSpec.describe "Admin Invoices Show Page", type: :feature do
   it "shows the total revenue from this invoice (not including discounts) and the total discounted revenue
     from this invoice which includes bulk discounts" do
       visit "admin/invoices/#{@invoice_1.id}"
-save_and_open_page      
+      
       within("#revenue") do
         expect(page).to have_content("Invoice Revenue: $31,697.08")
         expect(page).to have_content("Total Discounts Applied: -$0.00")
