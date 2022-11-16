@@ -1,4 +1,5 @@
 # require './app/poros/github_contributor_search'
+# require './app/poros/github_contributor_search'
 
 class ApplicationController < ActionController::Base
   # before_action :get_info, only: [:index, :show, :new, :edit]
@@ -8,8 +9,5 @@ class ApplicationController < ActionController::Base
   #   @contributors = GithubSearch.new.contributor_names
   #   @pull_requests = GithubSearch.new.pull_requests
   # end
-
-  
-
 
 end

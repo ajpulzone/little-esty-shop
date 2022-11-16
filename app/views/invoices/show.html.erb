@@ -9,9 +9,9 @@
 <p>Created on: <%= @invoice.formatted_date %></p>
 <p>GROUP PROJECT Total Revenue (Not accurate): <%= number_to_currency(@merchant.invoice_revenue(@invoice.id) / 100.00) %>
 <div id="revenue">
-<p>Invoice Revenue: <%= number_to_currency(@invoice.total_invoice_revenue / 100) %> </p>
-<p>Total Discounts Applied: -<%= number_to_currency(@invoice.total_invoice_discounts / 100) %> </p>
-<p>Total Invoice Revenue: <%= number_to_currency(@invoice.total_discounted_revenue / 100) %> </p>
+<p>Invoice Revenue: <%= number_to_currency(@invoice.total_invoice_revenue.to_f / 100) %> </p>
+<p>Total Discounts Applied: -<%= number_to_currency(@invoice.total_invoice_discounts.to_f / 100) %> </p>
+<p>Total Invoice Revenue: <%= number_to_currency(@invoice.total_discounted_revenue.to_f / 100) %> </p>
 </div>
 <h3>Customer:</h3>
 <p><%= @invoice.customer.first_name %> <%= @invoice.customer.last_name %></p>

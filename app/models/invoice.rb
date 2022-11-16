@@ -30,18 +30,19 @@ class Invoice < ApplicationRecord
   #this method is a new one I created for the solo project and does give the correct answer
   def total_invoice_revenue
     invoice_items.sum do |invoice_item|
-    invoice_item.invoice_item_total_revenue
+      # binding.pry
+    invoice_item.invoice_item_total_revenue.to_f
     end
   end 
 
   def total_invoice_discounts
     invoice_items.sum do |invoice_item|
-      invoice_item.total_discount_amount
+      invoice_item.total_discount_amount.to_f
     end
   end
 
   def total_discounted_revenue
-    total_invoice_revenue - total_invoice_discounts
+    total_invoice_revenue.to_f - total_invoice_discounts.to_f
   end
   
 end

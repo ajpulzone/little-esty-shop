@@ -16,7 +16,12 @@
 <p>Invoice Status: <%= @invoice.status %></p>
 <p>Created On: <%= @invoice.formatted_date %></p>
 <p>Customer: <%= @invoice.customer.first_name %> <%= @invoice.customer.last_name %></p>
-<p>Total Revenue: <%= number_to_currency(@invoice.total_revenue) %></p>
+<p>GROUP PROJECT Total Revenue (Not accurate): <%= number_to_currency(@invoice.total_revenue / 100) %></p>
+<div id="revenue">
+<p>Invoice Revenue: <%= number_to_currency(@invoice.total_invoice_revenue.to_f / 100) %> </p>
+<p>Total Discounts Applied: -<%= number_to_currency(@invoice.total_invoice_discounts.to_f / 100) %> </p>
+<p>Total Invoice Revenue: <%= number_to_currency(@invoice.total_discounted_revenue.to_f / 100) %> </p>
+</div>
 <br>
 
 <h3>Items On This Invoice:</h3>
@@ -35,7 +40,7 @@
           <tr id="invoice-<%= invoice_item.item.id %>">
             <td><%= invoice_item.item.name %></td>
             <td><%= invoice_item.quantity %></td>
-            <td><%= number_to_currency(invoice_item.item.unit_price) %></td>
+            <td><%= number_to_currency(invoice_item.unit_price.to_f/100) %></td>
             <td><%= invoice_item.status %></td>
           </tr>
         <% end %>

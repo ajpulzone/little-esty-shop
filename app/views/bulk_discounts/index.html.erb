@@ -1,6 +1,9 @@
 <div id:="merchant-bulk_discounts">
   <h1>Bulk Discounts for <%= link_to "#{@merchant.name}", merchant_path(@merchant.id) %></h1>
 </div>
+<div id="holidays">
+<%= render partial: "shared/discounts_index_holidays" %>
+</div>
 <h4> <%= link_to "Create A New Bulk Discount", new_merchant_bulk_discount_path(@merchant.id) %> </h5>
 
 
