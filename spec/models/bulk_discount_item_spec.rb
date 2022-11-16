@@ -6,4 +6,5 @@ RSpec.describe BulkDiscountItem, type: :model do
     it { should belong_to :bulk_discount } 
     it { should belong_to :item }
   end
+  
 end

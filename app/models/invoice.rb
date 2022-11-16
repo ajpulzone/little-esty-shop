@@ -1,12 +1,11 @@
 class Invoice < ApplicationRecord
+
   belongs_to :customer
   has_many :invoice_items
   has_many :items, through: :invoice_items
   has_many :transactions
   has_many :bulk_discounts, through: :items
   has_many :merchants, through: :items
-
-
 
   enum status: [ :completed, :cancelled, "in progress" ]
 
@@ -30,7 +29,6 @@ class Invoice < ApplicationRecord
   #this method is a new one I created for the solo project and does give the correct answer
   def total_invoice_revenue
     invoice_items.sum do |invoice_item|
-      # binding.pry
     invoice_item.invoice_item_total_revenue.to_f
     end
   end 

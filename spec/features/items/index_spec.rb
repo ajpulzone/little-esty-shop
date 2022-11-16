@@ -69,8 +69,6 @@ RSpec.describe 'Merchants' do
         end
 
       end
-
-
     end
   end
 end
