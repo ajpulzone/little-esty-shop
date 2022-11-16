@@ -168,7 +168,6 @@ RSpec.describe "Bulk Discounts Index Page", type: :feature do
       expect(page).to have_field(:discount_percent)
       expect(page).to have_field(:quantity_threshold)
       expect(page).to have_button("Submit")
-
   end
 
   it "when the form is filled in with valid data, and the submit button is clicked then the merchant

@@ -67,4 +67,5 @@ class Merchant < ApplicationRecord
             .order('invoices.created_at desc')
             .limit(1)
   end
+  
 end

@@ -12,4 +12,5 @@ class HolidaySearch
   def service
     HolidayService.new
   end
+  
 end

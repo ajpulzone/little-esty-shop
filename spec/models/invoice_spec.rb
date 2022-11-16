@@ -92,7 +92,8 @@ RSpec.describe Invoice, type: :model do
     end 
   end 
 
-    describe "Solo Project Tesing" do
+    describe "Solo Project Testing" do
+
       before(:each) do
         @merchant_1 = Merchant.create!(name: "Target", status: 1)
         @merchant_2 = Merchant.create!(name: "Amazon", status: 1)

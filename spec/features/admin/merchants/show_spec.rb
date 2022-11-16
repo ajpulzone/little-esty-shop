@@ -22,9 +22,6 @@ RSpec.describe 'Admin' do
         expect(current_path).to eq("/admin/merchants/#{@merchant.id}")
         expect(page).to have_content("NewFooMerchant")
       end
-
     end
-
   end
-
 end
