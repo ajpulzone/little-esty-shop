@@ -13,4 +13,4 @@ class HolidaySearch
     HolidayService.new
   end
   
-end
+end 
